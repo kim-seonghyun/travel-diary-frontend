@@ -1,66 +1,46 @@
 <script setup>
+import TravelDiaryItem from "./\bTravelDiaryItem.vue";
+</script>
 
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      items: [], // API에서 가져온 데이터를 저장
+      loading: true, // 로딩 상태
+      error: null, // 에러 메시지
+    };
+  },
+  mounted() {
+    // 컴포넌트가 마운트된 후 데이터를 가져옴
+    axios
+      .get("http://localhost:8080/api/travel-diary/list")
+      .then((response) => {
+        console.log(response.data);
+        this.diaries = response.data;
+      })
+      .catch((error) => {
+        this.error = "Failed to load items: " + error.message;
+      })
+      .finally(() => {
+        this.loading = false;
+      });
+  },
+};
 </script>
 
 <template>
-    
-    <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/sdxl10/0271e53b-24a5-4d9d-9895-b40dc5d591ef.png");'
-                ></div>
-                <div>
-                  <p class="text-[#111418] text-base font-medium leading-normal">Mushrooms</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">$1.99</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">4.8/5 (12,000)</p>
-                </div>
-              </div>
-              <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/sdxl10/0cbe1705-a3ab-481e-9bb9-e667461d7405.png");'
-                ></div>
-                <div>
-                  <p class="text-[#111418] text-base font-medium leading-normal">Peaches</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">$1.49</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">4.7/5 (11,000)</p>
-                </div>
-              </div>
-              <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/sdxl10/af808baf-d32f-4794-a8c9-0b7d00bd6bc8.png");'
-                ></div>
-                <div>
-                  <p class="text-[#111418] text-base font-medium leading-normal">Green Beans</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">$0.99</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">4.9/5 (13,000)</p>
-                </div>
-              </div>
-              <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/stability/093036ac-7d57-43ca-9d7f-9f3873dfeb6d.png");'
-                ></div>
-                <div>
-                  <p class="text-[#111418] text-base font-medium leading-normal">Pineapple</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">$2.49</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">4.6/5 (10,000)</p>
-                </div>
-              </div>
-              <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/stability/84aeca14-a7bf-4ad1-9511-fede1580cebc.png");'
-                ></div>
-                <div>
-                  <p class="text-[#111418] text-base font-medium leading-normal">Pasta Sauce</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">$3.99</p>
-                  <p class="text-[#637588] text-sm font-normal leading-normal">4.8/5 (14,000)</p>
-                </div>
-              </div>
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+    <TravelDiaryItem
+      v-for="diary in this.diaries"
+      :key="diary.id"
+      :nick-name="diary.userId"
+      :title="diary.title"
+      :description="diary.description"
+    ></TravelDiaryItem>
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
