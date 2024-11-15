@@ -8,7 +8,7 @@
             <div class="size-4">
               <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
             </div>
-            <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">Camping Depot</h2>
+            <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">#Dotori</h2>
           </div>
           <div class="flex flex-1 justify-end gap-8">
             <label class="flex flex-col min-w-40 !h-10 max-w-64">
@@ -36,7 +36,7 @@
               <button
                 class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#f0f2f4] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
               >
-                <span class="truncate">Log in</span>
+                <a class="truncate" href="/login">Log in</a>
               </button>
               <button
                 class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
