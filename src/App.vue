@@ -1,11 +1,11 @@
 <script setup>
 import { Button } from "@/components/ui/button"
-import Main from "./views/Main.vue";
+import Main from "@/views/Main.vue" 
 </script>
 
 <template>
   <div>
-    <Main />
+    <Main></Main>
   </div>
 </template>
 
