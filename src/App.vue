@@ -4,9 +4,7 @@ import Main from "@/views/Main.vue"
 </script>
 
 <template>
-  <div>
-    <Main></Main>
-  </div>
+  <router-view></router-view>
 </template>
 
 <style scoped>

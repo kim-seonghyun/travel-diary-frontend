@@ -11,7 +11,7 @@
             class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
             style='background-image: url("https://cdn.usegalileo.ai/sdxl10/3cc7ef87-1f29-4b08-9910-ba74eaccbdab.png");'
           ></div>
-          <h1 class="text-[#111418] text-base font-medium leading-normal">Camping Depot</h1>
+          <h1 class="text-[#111418] text-base font-medium leading-normal">#Dotori</h1>
         </div>
         <div class="flex flex-col gap-2">
           <div class="flex items-center gap-3 px-3 py-2">
