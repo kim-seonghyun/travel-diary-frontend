@@ -1,13 +1,7 @@
-<script setup>
-import { Button } from "@/components/ui/button"
-import Main from "./views/Main.vue";
-</script>
+<script setup></script>
 
 <template>
-  <div>
-    <Main />
-  </div>
+  <router-view></router-view>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
