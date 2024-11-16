@@ -48,7 +48,8 @@
         <div
           v-for="destination in destinations"
           :key="destination.id"
-          class="bg-white shadow-lg rounded-lg overflow-hidden"
+          class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
+          @click="goDetail(destination.id)"
         >
           <img
             :src="destination.webPageUrl"
@@ -77,6 +78,14 @@
 import { ref, computed, onMounted, watch } from "vue"; // computed 추가
 import axios from "axios"; // axios 임포트
 import LocateSelect from "@/components/LocateSelect.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const goDetail = (id) => {
+  // ID를 기반으로 상세 페이지로 이동
+  router.push({ name: "travelDetail", params: { id } });
+};
 
 // 메뉴 항목들
 const menuItems = ref([
