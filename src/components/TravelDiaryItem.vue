@@ -1,11 +1,6 @@
 <template>
   <div class="flex flex-col gap-3 pb-3">
-    <div
-      class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-      style="
-        background-image: url('https://cdn.usegalileo.ai/sdxl10/0271e53b-24a5-4d9d-9895-b40dc5d591ef.png');
-      "
-    ></div>
+    <CardImage :id="id"></CardImage>
     <div>
       <p cla ss="text-[#111418] text-base font-medium leading-normal">
         닉네임 : {{ nickName }}
@@ -21,10 +16,13 @@
 </template>
 
 <script setup>
+import CardImage from "./CardImage.vue";
+
 defineProps({
   nickName: String,
   title: String,
   description: String,
+  id: Number,
 });
 </script>
 
