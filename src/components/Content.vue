@@ -4,6 +4,7 @@
 import TagList from "@/components/TagList.vue";
 import TravelDiary from "@/components/TravelDiary.vue";
 export default {
+  name: "TravelDiary",
   components: {
     TagList,
     TravelDiary,
