@@ -106,7 +106,13 @@ const destinations = ref([]); // 초기 상태는 빈 배열
 // 여행지 API에서 데이터를 가져오는 함수
 const fetchDestinations = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/trip/search"); // 여기에 실제 API URL을 사용하세요
+    // 여행지 목록 API
+    const response = await axios.get("http://localhost:8080/api/trip/search", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+
     destinations.value = response.data; // 응답받은 데이터를 destinations 배열에 저장
     console.log("여행지 데이터:", response.data);
   } catch (error) {

@@ -105,8 +105,11 @@ onMounted(() => {
 const fetchMypage = async () => {
   try {
     const response = await axios.get("http://localhost:8080/api/user/mypage", {
-      withCredentials: true, // 쿠키 포함하여 요청
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
     });
+
     mypage.value = response.data; // 응답받은 데이터를 destinations 배열에 저장
     console.log("여행지 데이터:", response.data);
   } catch (error) {

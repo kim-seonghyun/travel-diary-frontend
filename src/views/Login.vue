@@ -63,6 +63,10 @@ export default {
           { withCredentials: true }
         );
 
+        const { accessToken, refreshToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
         console.log("로그인 성공:", response.data);
         // 로그인 성공 후 메인 페이지로 라우팅
         this.$router.push("/"); // '/' 경로는 홈 페이지로 라우팅
