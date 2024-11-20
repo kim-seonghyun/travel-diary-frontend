@@ -62,6 +62,11 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
           :href="'/user/mypage'"
         ></HeaderMenuButton>
 
+        <HeaderMenuButton
+          :content="'도토리 상점'"
+          :href="'/store/dotori'"
+        ></HeaderMenuButton>
+
         <HeaderMenuButton :content="'QnA'" :href="'/question-list'">
         </HeaderMenuButton>
         <button
