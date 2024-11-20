@@ -44,40 +44,11 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-
-export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        const response = await axios.post(
-          `http://localhost:8080/api/user/login?email=${this.email}&password=${this.password}`,
-          {}, // POST 요청의 body 부분을 비워둡니다
-          { withCredentials: true }
-        );
-
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-
-        console.log("로그인 성공:", response.data);
-        // 로그인 성공 후 메인 페이지로 라우팅
-        this.$router.push("/"); // '/' 경로는 홈 페이지로 라우팅
-      } catch (error) {
-        console.error(
-          "로그인 실패:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    },
-  },
+<script setup>
+import { useAuthStore } from "@/authStore";
+const authStore = useAuthStore();
+const handleLogin = async () => {
+  await authStore.login({ email: email.value, password: password.value });
 };
 </script>
 
