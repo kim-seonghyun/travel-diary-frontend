@@ -1,80 +1,73 @@
 <template>
   <div class="flex min-h-screen bg-gray-50">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md p-4">
-      <h1 class="text-2xl font-semibold mb-8">#dotori</h1>
-      <nav>
-        <ul>
-          <li v-for="item in menuItems" :key="item.name" class="mb-4">
-            <a
-              :href="item.href"
-              class="flex items-center space-x-2 text-gray-600 hover:text-black"
-            >
-              <span :class="item.icon"></span>
-              <span>{{ item.name }}</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+    <div class="layout-container flex h-full grow flex-col">
+      <Header></Header>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8">
-      <!-- Header with Search -->
-      <div class="flex items-center justify-between mb-8">
-        <h2 class="text-3xl font-semibold">여행을 떠나보아요!</h2>
+      <div class="gap-1 px-6 flex flex-1 justify-center py-5">
+        <Navbar></Navbar>
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+          <!-- Header with Search -->
+          <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-semibold">여행을 떠나보아요!</h2>
 
-        <LocateSelect v-model="locationNumber" />
+            <LocateSelect v-model="locationNumber" />
 
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Search destinations"
-            class="w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
-          />
-          <button
-            @click="searchDestinations"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
-          >
-            🔍
-          </button>
-        </div>
-      </div>
-
-      <!-- Filter Tags -->
-
-      <!-- Destinations Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div
-          v-for="destination in destinations"
-          :key="destination.id"
-          class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
-          @click="goDetail(destination.id)"
-        >
-          <img
-            :src="destination.webPageUrl"
-            alt="destination"
-            class="w-full h-40 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-semibold mb-2">
-              {{ destination.facilityName }}
-            </h3>
-            <p class="text-sm text-gray-500">{{ destination.location }}</p>
-            <p class="mt-2 font-bold text-gray-800">
-              {{ destination.roadAddress }}
-            </p>
-            <p class="text-xs text-gray-400">
-              {{ destination.phoneNumber }}
-            </p>
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Search destinations"
+                class="w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
+              />
+              <button
+                @click="searchDestinations"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+              >
+                🔍
+              </button>
+            </div>
           </div>
-        </div>
+
+          <!-- Filter Tags -->
+
+          <!-- Destinations Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div
+              v-for="destination in destinations"
+              :key="destination.id"
+              class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
+              @click="goDetail(destination.id)"
+            >
+              <img
+                :src="destination.webPageUrl"
+                alt="destination"
+                class="w-full h-40 object-cover"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-semibold mb-2">
+                  {{ destination.facilityName }}
+                </h3>
+                <p class="text-sm text-gray-500">{{ destination.location }}</p>
+                <p class="mt-2 font-bold text-gray-800">
+                  {{ destination.roadAddress }}
+                </p>
+                <p class="text-xs text-gray-400">
+                  {{ destination.phoneNumber }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
 <script setup>
+import Header from "@/components/Header.vue";
+import Navbar from "@/components/Navbar.vue";
+
 import { ref, computed, onMounted, watch } from "vue"; // computed 추가
 import axios from "axios"; // axios 임포트
 import LocateSelect from "@/components/LocateSelect.vue";

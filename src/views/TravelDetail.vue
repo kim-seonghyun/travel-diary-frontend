@@ -90,6 +90,7 @@
 import KakaoMapView from "@/components/KakaoMapView.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import axios from "axios";
 
 const route = useRoute();
 const travel = ref(null);
@@ -98,16 +99,17 @@ const travel = ref(null);
 onMounted(() => {
   const id = route.params.id;
 
-  fetch(`http://localhost:8080/api/trip/detail?tripId=${id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      travel.value = data;
+  axios
+    .get(`http://localhost:8080/api/trip/detail`, {
+      params: { tripId: id },
+    })
+    .then((response) => {
+      travel.value = response.data;
     })
     .catch((error) => {
       console.error("데이터를 가져오는 데 실패했습니다.", error);
     });
 });
-
 // Sidebar menu items
 const menuItems = ref([
   { name: "Home", href: "#", icon: "icon-home" },
