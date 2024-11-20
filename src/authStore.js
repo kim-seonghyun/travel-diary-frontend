@@ -9,7 +9,8 @@ export const useAuthStore = defineStore("auth", {
     user: null,
   }),
   actions: {
-    async login(credentials) {
+    async login(credentials, router) {
+      console.log(credentials);
       try {
         const response = await axios.post(
           "http://localhost:8080/api/user/login",
@@ -20,9 +21,11 @@ export const useAuthStore = defineStore("auth", {
         this.user = response.data.user;
 
         localStorage.setItem("accessToken", this.accessToken);
+        localStorage.setItem("refreshToken", this.refreshToken);
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${this.accessToken}`;
+        router.push("/");
       } catch (error) {
         console.error("Login failed:", error);
       }
