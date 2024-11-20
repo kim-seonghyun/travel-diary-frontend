@@ -46,9 +46,20 @@
 
 <script setup>
 import { useAuthStore } from "@/authStore";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
 const authStore = useAuthStore();
+const router = useRouter();
+// 입력값 선언
+const email = ref("");
+const password = ref("");
+
 const handleLogin = async () => {
-  await authStore.login({ email: email.value, password: password.value });
+  await authStore.login(
+    { email: email.value, password: password.value },
+    router
+  );
 };
 </script>
 
