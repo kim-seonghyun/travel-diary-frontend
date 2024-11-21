@@ -11,6 +11,7 @@ import QuestionList from "@/components/qna/QuestionList.vue";
 import QuestionDetail from "@/components/qna/QuestionDetail.vue";
 import QuestionCreate from "@/components/qna/QuestionCreate.vue";
 import DotoriStore from "@/views/DotoriStore.vue";
+import PaymentSuccess from "@/views/PaymentSuccess.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,11 @@ const router = createRouter({
       path: "/store/dotori",
       name: "storeDotori",
       component: DotoriStore,
+    },
+    {
+      path: "/payment/success",
+      name: "paymentSuccess",
+      component: PaymentSuccess,
     },
   ],
 });

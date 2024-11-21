@@ -61,13 +61,19 @@
           <!-- Tab Content -->
           <div class="text-center">
             <p v-if="activeTab === 'faq'" class="text-gray-600">
+              <h2>1000 원 입니다!</h2>
               도토리 10개를 구매합니다!
+              <button @click="tosspayment(2000)"> 간편 결제하기</button>
             </p>
             <p v-if="activeTab === 'inquiry'" class="text-gray-600">
+              <h2>4000 원 입니다!</h2>
               도토리 50개를 구매합니다!
+              <button @click="tosspayment(4000)"> 간편 결제하기</button>
             </p>
             <p v-if="activeTab === 'notice'" class="text-gray-600">
+              <h2>8000 원 입니다!</h2>
               도토리 100개를 구매합니다!
+              <button @click="tosspayment(1000000000)"> 간편 결제하기</button>
             </p>
           </div>
         </main>
@@ -88,6 +94,19 @@ import Navbar from "@/components/Navbar.vue";
 
 // 현재 활성화된 탭을 관리하는 상태
 const activeTab = ref("faq");
+const clientKey = "test_ck_yZqmkKeP8gpJeNxBdjGd3bQRxB9l";
+const tossPayments = TossPayments(clientKey);
+
+const tosspayment = (amount) => {
+  tossPayments.requestPayment("카드",{
+          amount: amount,
+          orderId: "dwada89adwaf1",
+          orderName: "도토리(point)",
+          customerName: "--고객명--",
+          successUrl: "http://localhost:5173/payment/success",
+          failUrl: "http://localhost:8080/fail",
+        });
+}
 
 // 탭 변경 함수
 const setTab = (tabName) => {

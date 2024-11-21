@@ -115,6 +115,10 @@ const fetchDestinations = async () => {
 
 // 여행지 API에서 데이터를 가져오는 함수
 const fetchSearchByLocation = async () => {
+  console.log(
+    "Authorization Header:",
+    axios.defaults.headers.common["Authorization"]
+  );
   try {
     const response = await axios.get(
       `http://localhost:8080/api/trip/search/locate?locateId=${locationNumber.value}`
