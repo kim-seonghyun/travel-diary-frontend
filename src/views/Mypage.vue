@@ -48,65 +48,107 @@
           <section class="space-y-4">
             <div class="bg-white p-4 rounded-lg shadow">
               <h4 class="text-lg font-semibold text-gray-800">
-                내가 구매한 컨텐츠들
+                결제 내역 보러가기
               </h4>
-              <p class="text-gray-500">[김성준] 도쿄여행의 모든 것!</p>
+              <p class="text-gray-500">도토리 할인중!</p>
+              <!-- 여기 버튼에 toggle 적용 -->
               <button
                 class="mt-2 text-sm text-[#637F96] font-semibold hover:underline"
+                @click="toggleModal"
               >
                 보러가기
               </button>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow">
-              <h4 class="text-lg font-semibold text-gray-800">
-                무제한 혜택 받기
-              </h4>
-              <p class="text-gray-500">무제한 5,000원 지급</p>
-            </div>
           </section>
         </main>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      v-if="isModalOpen"
+      class="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50"
+    >
+      <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center border-b pb-4">
+          <h2 class="text-lg font-semibold text-gray-800">결제 내역</h2>
+          <button
+            @click="toggleModal"
+            class="text-gray-500 hover:text-black focus:outline-none"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="py-4 space-y-4">
+          <!-- 결제 내역 리스트 -->
+          <ul v-if="bills.length > 0" class="space-y-2">
+            <li
+              v-for="(bill, index) in bills"
+              :key="index"
+              class="p-4 bg-gray-100 rounded-lg shadow"
+            >
+              <div class="flex justify-between items-center">
+                <p class="text-gray-800 font-semibold">
+                  상품명: {{ bill.orderName }}
+                </p>
+                <p
+                  :class="[
+                    'text-sm font-semibold px-2 py-1 rounded',
+                    bill.status === 'DONE' ? 'bg-blue-100 text-blue-600' : '',
+                    bill.status === 'CANCEL' ? 'bg-red-100 text-red-600' : '',
+                  ]"
+                >
+                  {{
+                    bill.status === "DONE"
+                      ? "결제 완료"
+                      : bill.status === "CANCEL"
+                      ? "결제 취소"
+                      : "결제 진행 중"
+                  }}
+                </p>
+              </div>
+              <p class="text-gray-600">금액: {{ bill.amount }}원</p>
+              <p class="text-gray-500">결제 날짜: {{ bill.rechargeAt }}</p>
+              <p class="text-gray-500">결제 방식: {{ bill.provider }}</p>
+
+              <!-- 환불 버튼 -->
+              <button
+                @click="
+                  refundBill(bill.id, bill.paymentId, '기간 내 결제 취소')
+                "
+                class="mt-2 px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600"
+              >
+                환불 요청
+              </button>
+            </li>
+          </ul>
+
+          <!-- 데이터가 없을 때 -->
+          <p v-else class="text-gray-500">결제 내역이 없습니다.</p>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex justify-end pt-4 border-t">
+          <button
+            @click="toggleModal"
+            class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+            닫기
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed, onMounted, watch } from "vue"; // computed 추가
-import axios from "axios"; // axios 임포트
+import { ref, computed, onMounted } from "vue";
+import axios from "axios";
 import Header from "@/components/Header.vue";
 import Navbar from "@/components/Navbar.vue";
-
-const mypage = ref({
-  sea: 0,
-  mountain: 0,
-  city: 0,
-  festival: 0,
-  valley: 0,
-  name: "",
-  email: "",
-  dotori: 0,
-});
-
-// 컴포넌트가 마운트될 때 여행지 데이터를 가져옵니다.
-onMounted(() => {
-  fetchMypage();
-});
-
-// 여행지 API에서 데이터를 가져오는 함수
-const fetchMypage = async () => {
-  try {
-    const response = await axios.get("http://localhost:8080/api/user/mypage", {
-      // headers: {
-      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      // },
-    });
-
-    mypage.value = response.data; // 응답받은 데이터를 destinations 배열에 저장
-    console.log("여행지 데이터:", response.data);
-  } catch (error) {
-    console.error("여행지 데이터를 가져오는 데 실패했습니다:", error);
-  }
-};
 
 export default {
   components: {
@@ -114,9 +156,72 @@ export default {
     Navbar,
   },
   setup() {
-    onMounted(fetchMypage);
+    const mypage = ref({
+      sea: 0,
+      mountain: 0,
+      city: 0,
+      festival: 0,
+      valley: 0,
+      name: "",
+      email: "",
+      dotori: 0,
+    });
 
-    // mypage 데이터가 갱신될 때마다 자동으로 travelStyles도 갱신
+    const isModalOpen = ref(false);
+    const bills = ref([]);
+
+    const toggleModal = () => {
+      isModalOpen.value = !isModalOpen.value;
+    };
+
+    const refundBill = async (id, paymentId, cancelReason) => {
+      console.log(paymentId);
+      console.log(cancelReason);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/toss/cancel", // URL
+          { id, paymentId, cancelReason }, // Body 데이터
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // API 호출 후 결제 상태 업데이트
+        const updatedBill = bills.value.find((bill) => bill.id === id);
+        if (updatedBill) {
+          updatedBill.status = "CANCEL"; // API의 응답에 따라 상태 업데이트
+        }
+        alert("환불이 처리되었습니다.");
+      } catch (error) {
+        console.error("환불 실패:", error);
+        alert("환불 처리 중 오류가 발생했습니다.");
+      }
+    };
+
+    const fetchMypage = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/user/mypage"
+        );
+        mypage.value = response.data;
+      } catch (error) {
+        console.error("데이터 로드 실패:", error);
+      }
+    };
+
+    const fetchBills = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/toss/bills"
+        );
+        bills.value = response.data;
+      } catch (error) {
+        console.error("데이터 로드 실패:", error);
+      }
+    };
+
     const travelStyles = computed(() => [
       { name: "바다", progress: mypage.value.sea },
       { name: "산", progress: mypage.value.mountain },
@@ -124,12 +229,22 @@ export default {
       { name: "축제", progress: mypage.value.festival },
       { name: "계곡", progress: mypage.value.valley },
     ]);
-    console.log(travelStyles);
-    return { mypage, travelStyles };
+
+    onMounted(fetchMypage);
+    onMounted(fetchBills);
+
+    return {
+      mypage,
+      bills,
+      travelStyles,
+      isModalOpen,
+      toggleModal,
+      refundBill,
+    };
   },
 };
 </script>
 
 <style scoped>
-/* PC 화면에 적합한 전체 스타일을 정의 */
+/* 추가 스타일 정의 가능 */
 </style>
