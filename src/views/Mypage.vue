@@ -125,7 +125,7 @@ export default {
       { name: "계곡", progress: mypage.value.valley },
     ]);
     console.log(travelStyles);
-    return { mypage, travelStyles, Header, Navbar };
+    return { mypage, travelStyles };
   },
 };
 </script>
