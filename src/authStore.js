@@ -54,9 +54,13 @@ export const useAuthStore = defineStore("auth", {
       this.accessToken = localStorage.getItem("accessToken")
       this.refreshToken = localStorage.getItem("refreshToken")
       this.user = localStorage.getItem("user");
-      axios.defaults.headers.common[
-          "Authorization"
-          ] = `Bearer ${this.accessToken}`;
+      if(this.isTokenExpired()){
+
+      }else{
+        axios.defaults.headers.common[
+            "Authorization"
+            ] = `Bearer ${this.accessToken}`;
+      }
     },
     isTokenExpired(token) {
       if (!token) return true;
