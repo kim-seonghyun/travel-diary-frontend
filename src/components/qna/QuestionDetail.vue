@@ -35,13 +35,7 @@
           <p>작성일: {{ formatDate(answer.createdAt) }}</p>
         </div>
         <p class="mb-4">{{ answer.body }}</p>
-        <div v-if="answer.image_url">
-          <img
-              :src="answer.image_url"
-              alt="Answer Image"
-              class="rounded-lg border border-gray-700 w-full"
-          />
-        </div>
+
       </div>
     </div>
 
@@ -62,17 +56,6 @@
               class="w-full p-2 rounded-lg bg-gray-900 border border-gray-700 text-white"
               rows="4"
           ></textarea>
-        </div>
-        <div>
-          <label for="answerImage" class="block text-sm font-medium mb-2 text-white">
-            이미지 URL (선택)
-          </label>
-          <input
-              type="url"
-              id="answerImage"
-              v-model="answerImageUrl"
-              class="w-full p-2 rounded-lg bg-gray-900 border border-gray-700 text-white"
-          />
         </div>
         <button
             type="submit"
@@ -95,6 +78,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
+import {useAuthStore} from "@/authStore.js";
 
 const route = useRoute();
 const id = route.params.id;
@@ -108,6 +92,8 @@ const answerBody = ref("");
 const answerImageUrl = ref("");
 const answerSuccess = ref(false);
 const answerError = ref(null);
+
+const authStore = useAuthStore();
 
 const fetchQuestion = async () => {
   loading.value = true;
@@ -131,14 +117,14 @@ const formatDate = (datetime) => {
 };
 
 const submitAnswer = async () => {
+  const user = JSON.parse(authStore.user);
   const payload = {
     body: answerBody.value,
-    imageUrl: answerImageUrl.value || null,
     questionId: id,
-    userId: 2,
+    userId: user.id,
   };
   try {
-    const response = await axios.post(
+    const response =await axios.post(
         `http://localhost:8080/api/question/${id}/answer`,
         payload
     );
