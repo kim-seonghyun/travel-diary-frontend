@@ -3,14 +3,24 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 export const useAuthStore = defineStore("auth", {
-  state: () => ({
+  state: () =>{
+    return {
     accessToken: null,
     refreshToken: null,
-    user: null,
-  }),
+    user: {
+      id: null,
+      name: null,
+      email: null,
+      dotori: null
+    },
+  }},
+  getters:{
+    userid(state){
+      return state.user.id;
+    }
+  },
   actions: {
     async login(credentials, router) {
-      console.log(credentials);
       try {
         const response = await axios.post(
           "http://localhost:8080/api/user/login",
@@ -19,9 +29,9 @@ export const useAuthStore = defineStore("auth", {
         this.accessToken = response.data.accessToken;
         this.refreshToken = response.data.refreshToken;
         this.user = response.data.user;
-
         localStorage.setItem("accessToken", this.accessToken);
         localStorage.setItem("refreshToken", this.refreshToken);
+        localStorage.setItem("user", JSON.stringify(this.user));
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${this.accessToken}`;
@@ -36,17 +46,17 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
       delete axios.defaults.headers.common["Authorization"];
+
     },
     checkAuth() {
-      const accessToken = localStorage.getItem("accessToken");
-      if (this.isTokenExpired(accessToken)) {
-      } else {
-        this.accessToken = accessToken;
-        axios.defaults.headers.common[
+      this.accessToken = localStorage.getItem("accessToken")
+      this.refreshToken = localStorage.getItem("refreshToken")
+      this.user = localStorage.getItem("user");
+      axios.defaults.headers.common[
           "Authorization"
-        ] = `Bearer ${accessToken}`;
-      }
+          ] = `Bearer ${this.accessToken}`;
     },
     isTokenExpired(token) {
       if (!token) return true;
