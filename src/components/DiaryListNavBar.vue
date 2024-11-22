@@ -102,7 +102,12 @@ const fetchDomestic = async () => {
   try {
     // 여행지 목록 API
     const response = await axios.get(
-      `http://localhost:8080/api/post/list/${tripId}`
+      `http://localhost:8080/api/post/list/${tripId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
     );
 
     domestic.value = response.data; // 응답받은 데이터를 destinations 배열에 저장

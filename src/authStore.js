@@ -3,21 +3,22 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 export const useAuthStore = defineStore("auth", {
-  state: () =>{
+  state: () => {
     return {
-    accessToken: null,
-    refreshToken: null,
-    user: {
-      id: null,
-      name: null,
-      email: null,
-      dotori: null
-    },
-  }},
-  getters:{
-    userid(state){
+      accessToken: null,
+      refreshToken: null,
+      user: {
+        id: null,
+        name: null,
+        email: null,
+        dotori: null,
+      },
+    };
+  },
+  getters: {
+    userid(state) {
       return state.user.id;
-    }
+    },
   },
   actions: {
     async login(credentials, router) {
@@ -48,18 +49,16 @@ export const useAuthStore = defineStore("auth", {
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
       delete axios.defaults.headers.common["Authorization"];
-
     },
     checkAuth() {
-      this.accessToken = localStorage.getItem("accessToken")
-      this.refreshToken = localStorage.getItem("refreshToken")
+      this.accessToken = localStorage.getItem("accessToken");
+      this.refreshToken = localStorage.getItem("refreshToken");
       this.user = localStorage.getItem("user");
-      if(this.isTokenExpired()){
-
-      }else{
+      if (this.isTokenExpired()) {
+      } else {
         axios.defaults.headers.common[
-            "Authorization"
-            ] = `Bearer ${this.accessToken}`;
+          "Authorization"
+        ] = `Bearer ${this.accessToken}`;
       }
     },
     isTokenExpired(token) {
