@@ -51,7 +51,6 @@
                 결제 내역 보러가기
               </h4>
               <p class="text-gray-500">도토리 할인중!</p>
-              <!-- 여기 버튼에 toggle 적용 -->
               <button
                 class="mt-2 text-sm text-[#637F96] font-semibold hover:underline"
                 @click="toggleModal"
@@ -83,7 +82,6 @@
 
         <!-- Modal Content -->
         <div class="py-4 space-y-4">
-          <!-- 결제 내역 리스트 -->
           <ul v-if="bills.length > 0" class="space-y-2">
             <li
               v-for="(bill, index) in bills"
@@ -113,8 +111,6 @@
               <p class="text-gray-600">금액: {{ bill.amount }}원</p>
               <p class="text-gray-500">결제 날짜: {{ bill.rechargeAt }}</p>
               <p class="text-gray-500">결제 방식: {{ bill.provider }}</p>
-
-              <!-- 환불 버튼 -->
               <button
                 @click="
                   refundBill(bill.id, bill.paymentId, '기간 내 결제 취소')
@@ -125,8 +121,6 @@
               </button>
             </li>
           </ul>
-
-          <!-- 데이터가 없을 때 -->
           <p v-else class="text-gray-500">결제 내역이 없습니다.</p>
         </div>
 
@@ -144,105 +138,95 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import Header from "@/components/Header.vue";
 import Navbar from "@/components/Navbar.vue";
 
-export default {
-  components: {
-    Header,
-    Navbar,
-  },
-  setup() {
-    const mypage = ref({
-      sea: 0,
-      mountain: 0,
-      city: 0,
-      festival: 0,
-      valley: 0,
-      name: "",
-      email: "",
-      dotori: 0,
-    });
+// 상태 변수 정의
+const mypage = ref({
+  sea: 0,
+  mountain: 0,
+  city: 0,
+  festival: 0,
+  valley: 0,
+  name: "",
+  email: "",
+  dotori: 0,
+});
 
-    const isModalOpen = ref(false);
-    const bills = ref([]);
+const isModalOpen = ref(false);
+const bills = ref([]);
 
-    const toggleModal = () => {
-      isModalOpen.value = !isModalOpen.value;
-    };
-
-    const refundBill = async (id, paymentId, cancelReason) => {
-      console.log(paymentId);
-      console.log(cancelReason);
-      try {
-        const response = await axios.post(
-          "http://localhost:8080/api/toss/cancel", // URL
-          { id, paymentId, cancelReason }, // Body 데이터
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        // API 호출 후 결제 상태 업데이트
-        const updatedBill = bills.value.find((bill) => bill.id === id);
-        if (updatedBill) {
-          updatedBill.status = "CANCEL"; // API의 응답에 따라 상태 업데이트
-        }
-        alert("환불이 처리되었습니다.");
-      } catch (error) {
-        console.error("환불 실패:", error);
-        alert("환불 처리 중 오류가 발생했습니다.");
-      }
-    };
-
-    const fetchMypage = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api/user/mypage"
-        );
-        mypage.value = response.data;
-      } catch (error) {
-        console.error("데이터 로드 실패:", error);
-      }
-    };
-
-    const fetchBills = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api/toss/bills"
-        );
-        bills.value = response.data;
-      } catch (error) {
-        console.error("데이터 로드 실패:", error);
-      }
-    };
-
-    const travelStyles = computed(() => [
-      { name: "바다", progress: mypage.value.sea },
-      { name: "산", progress: mypage.value.mountain },
-      { name: "도시", progress: mypage.value.city },
-      { name: "축제", progress: mypage.value.festival },
-      { name: "계곡", progress: mypage.value.valley },
-    ]);
-
-    onMounted(fetchMypage);
-    onMounted(fetchBills);
-
-    return {
-      mypage,
-      bills,
-      travelStyles,
-      isModalOpen,
-      toggleModal,
-      refundBill,
-    };
-  },
+// 함수 정의
+const toggleModal = () => {
+  isModalOpen.value = !isModalOpen.value;
 };
+
+const refundBill = async (id, paymentId, cancelReason) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/toss/cancel",
+      { id, paymentId, cancelReason },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+
+    const updatedBill = bills.value.find((bill) => bill.id === id);
+    if (updatedBill) {
+      updatedBill.status = "CANCEL";
+    }
+    alert("환불이 처리되었습니다.");
+  } catch (error) {
+    console.error("환불 실패:", error);
+    alert("환불 처리 중 오류가 발생했습니다.");
+  }
+};
+
+const fetchMypage = async () => {
+  try {
+    const response = await axios.get("http://localhost:8080/api/user/mypage", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    mypage.value = response.data;
+  } catch (error) {
+    console.error("데이터 로드 실패:", error);
+  }
+};
+
+const fetchBills = async () => {
+  try {
+    const response = await axios.get("http://localhost:8080/api/toss/bills", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    bills.value = response.data;
+  } catch (error) {
+    console.error("데이터 로드 실패:", error);
+  }
+};
+
+// 계산된 속성
+const travelStyles = computed(() => [
+  { name: "바다", progress: mypage.value.sea },
+  { name: "산", progress: mypage.value.mountain },
+  { name: "도시", progress: mypage.value.city },
+  { name: "축제", progress: mypage.value.festival },
+  { name: "계곡", progress: mypage.value.valley },
+]);
+
+// 컴포넌트가 마운트될 때 데이터 로드
+onMounted(() => {
+  fetchMypage();
+  fetchBills();
+});
 </script>
 
 <style scoped>
