@@ -73,7 +73,7 @@
             <p v-if="activeTab === 'notice'" class="text-gray-600">
               <h2>8000 원 입니다!</h2>
               도토리 100개를 구매합니다!
-              <button @click="tosspayment(1000000000)"> 간편 결제하기</button>
+              <button @click="tosspayment(8000)"> 간편 결제하기</button>
             </p>
           </div>
         </main>
@@ -91,22 +91,40 @@
 import { ref } from "vue";
 import Header from "@/components/Header.vue";
 import Navbar from "@/components/Navbar.vue";
+import { jwtDecode } from "jwt-decode"; // JWT 디코딩
+
+const token = localStorage.getItem("accessToken");
+const payload = jwtDecode(token);
 
 // 현재 활성화된 탭을 관리하는 상태
 const activeTab = ref("faq");
+const userName = ref()
 const clientKey = "test_ck_yZqmkKeP8gpJeNxBdjGd3bQRxB9l";
 const tossPayments = TossPayments(clientKey);
 
+
+
 const tosspayment = (amount) => {
+
   tossPayments.requestPayment("카드",{
           amount: amount,
-          orderId: "lys2221",
+          orderId: generateRandomOrderId(),
           orderName: "도토리(point)",
-          customerName: "--고객명--",
+          customerName:  payload.userNmae,
           successUrl: "http://localhost:5173/payment/success",
           failUrl: "http://localhost:8080/fail",
         });
 }
+
+const generateRandomOrderId = () => {
+  // UUID 형식 생성
+  return 'xxxx-xxxx-4xxx-yxxx-xxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
 
 // 탭 변경 함수
 const setTab = (tabName) => {

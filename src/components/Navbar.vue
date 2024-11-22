@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import HeaderMenuButton from "./HeaderMenuButton.vue";
+</script>
 
 <template>
   <div class="layout-content-container flex flex-col w-80">
@@ -109,7 +111,7 @@
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              Fresh Produce
+              dwadaw
             </p>
           </div>
           <div class="flex items-center gap-3 px-3 py-2">
