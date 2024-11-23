@@ -30,7 +30,7 @@
         >
           <!-- 썸네일 이미지 -->
           <img
-              :src="'http://localhost:8080/images/uploads/' + question.imageUrl || 'https://via.placeholder.com/120x120'"
+              :src="question.imageSrc"
               alt="Thumbnail"
               class="w-32 h-32 rounded-xl object-cover"
           />
@@ -56,16 +56,48 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import {useAuthStore} from "@/authStore.js";
 
 const questions = ref([]);
 const loading = ref(false);
 const error = ref(null);
+const authStore = useAuthStore()
+const imageSrc = ref("https://via.placeholder.com/120x120")
+
+
+const fetchImage = async (imageUrl) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/images/uploads/${imageUrl}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },responseType: 'blob',
+    });
+    console.log(imageUrl)
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("이미지 로드 실패:", error);
+    return "https://via.placeholder.com/120x120"; // 실패 시 기본 이미지 표시
+  }
+};
 
 const fetchQuestions = async () => {
   loading.value = true;
   try {
-    const response = await axios.get("http://localhost:8080/api/question/list");
+    const response = await axios.get("http://localhost:8080/api/question/list", {
+      headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${authStore.accessToken}` }
+      ,
+    });
     questions.value = response.data;
+    questions.value = await Promise.all(
+        response.data.map(async (question) => {
+          if (question.imageUrl) {
+            question.imageSrc = await fetchImage(question.imageUrl);
+          } else {
+            question.imageSrc = "https://via.placeholder.com/120x120";
+          }
+          return question;
+        })
+    );
   } catch (err) {
     error.value = "질문을 불러오는 데 실패했습니다.";
     console.error(err);

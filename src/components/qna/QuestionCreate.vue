@@ -107,7 +107,10 @@ const submitQuestion = async () => {
     userId: user.id
   })], {type: "application/json"}));
   try {
-    await axios.post("http://localhost:8080/api/question/register", formData);
+    await axios.post("http://localhost:8080/api/question/register", formData, {
+      headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${authStore.accessToken}` }
+      ,
+    });
 
     success.value = true;
     error.value = null;
@@ -127,5 +130,4 @@ const submitQuestion = async () => {
 </script>
 
 <style>
-/* TailwindCSS를 사용하므로 추가 스타일은 필요하지 않습니다 */
 </style>
