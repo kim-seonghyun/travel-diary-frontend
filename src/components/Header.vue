@@ -1,5 +1,6 @@
 <script setup>
 import HeaderMenuButton from "./HeaderMenuButton.vue";
+import LogoutButton from "./LogoutButton.vue";
 </script>
 
 <template>
@@ -51,6 +52,8 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
           :content="'Log in'"
           :href="'/login'"
         ></HeaderMenuButton>
+
+        <LogoutButton></LogoutButton>
 
         <HeaderMenuButton
           :content="'여행지 검색'"

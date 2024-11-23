@@ -12,7 +12,7 @@ import QuestionDetail from "@/components/qna/QuestionDetail.vue";
 import QuestionCreate from "@/components/qna/QuestionCreate.vue";
 import DotoriStore from "@/views/DotoriStore.vue";
 import PaymentSuccess from "@/views/PaymentSuccess.vue";
-import PostList from "@/components/posts/PostList.vue";
+// import PostList from "@/components/posts/PostList.vue";
 import CreatePost from "@/components/posts/CreatePost.vue";
 
 const router = createRouter({
@@ -27,10 +27,10 @@ const router = createRouter({
           path: "/travel-diary",
           component: TravelDiary,
         },
-        {
-          path: "/post-list",
-          component: PostList,
-        },
+        // {
+        //   path: "/post-list",
+        //   component: PostList,
+        // },
         {
           path: "question-list",
           component: QuestionList,
@@ -45,8 +45,8 @@ const router = createRouter({
         },
         {
           path: "/post/create",
-          component: CreatePost
-        }
+          component: CreatePost,
+        },
       ],
     },
     {
