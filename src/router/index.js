@@ -12,6 +12,8 @@ import QuestionDetail from "@/components/qna/QuestionDetail.vue";
 import QuestionCreate from "@/components/qna/QuestionCreate.vue";
 import DotoriStore from "@/views/DotoriStore.vue";
 import PaymentSuccess from "@/views/PaymentSuccess.vue";
+import PostList from "@/components/posts/PostList.vue";
+import CreatePost from "@/components/posts/CreatePost.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,8 +24,12 @@ const router = createRouter({
       component: Main,
       children: [
         {
-          path: "",
+          path: "/travel-diary",
           component: TravelDiary,
+        },
+        {
+          path: "/post-list",
+          component: PostList,
         },
         {
           path: "question-list",
@@ -37,6 +43,10 @@ const router = createRouter({
           path: "question/register",
           component: QuestionCreate,
         },
+        {
+          path: "/post/create",
+          component: CreatePost
+        }
       ],
     },
     {
@@ -72,11 +82,6 @@ const router = createRouter({
     {
       path: "/payment/success",
       name: "paymentSuccess",
-      component: PaymentSuccess,
-    },
-    {
-      path: "/payment/bills",
-      name: "listBills",
       component: PaymentSuccess,
     },
   ],
