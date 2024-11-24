@@ -5,31 +5,27 @@
     <div
       class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#f0f2f4] pl-4 pr-4"
     >
-      <p class="text-[#111418] text-sm font-medium leading-normal">Mushrooms</p>
+      <p class="text-[#111418] text-sm font-medium leading-normal">국내</p>
     </div>
     <div
       class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#f0f2f4] pl-4 pr-4"
     >
-      <p class="text-[#111418] text-sm font-medium leading-normal">Fruit</p>
+      <p class="text-[#111418] text-sm font-medium leading-normal">역사</p>
     </div>
     <div
       class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#f0f2f4] pl-4 pr-4"
     >
-      <p class="text-[#111418] text-sm font-medium leading-normal">
-        Vegetables
-      </p>
+      <p class="text-[#111418] text-sm font-medium leading-normal">조용한</p>
     </div>
     <div
       class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#f0f2f4] pl-4 pr-4"
     >
-      <p class="text-[#111418] text-sm font-medium leading-normal">Beans</p>
+      <p class="text-[#111418] text-sm font-medium leading-normal">차분한</p>
     </div>
     <div
       class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#f0f2f4] pl-4 pr-4"
     >
-      <p class="text-[#111418] text-sm font-medium leading-normal">
-        Pasta Sauce
-      </p>
+      <p class="text-[#111418] text-sm font-medium leading-normal">서울</p>
     </div>
   </div>
 </template>
