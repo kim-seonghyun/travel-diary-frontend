@@ -53,8 +53,8 @@ export const useAuthStore = defineStore("auth", {
     checkAuth() {
       this.accessToken = localStorage.getItem("accessToken");
       this.refreshToken = localStorage.getItem("refreshToken");
-      this.user = localStorage.getItem("user");
-      if (this.isTokenExpired()) {
+      this.user = JSON.parse(localStorage.getItem("user"));
+      if (this.isTokenExpired(this.accessToken)) {
       } else {
         axios.defaults.headers.common[
           "Authorization"
