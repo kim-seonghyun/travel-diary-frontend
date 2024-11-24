@@ -75,6 +75,8 @@
               :phoneNumber="travel.phoneNumber"
             />
           </div>
+
+          <DiaryListNavBar :tripId="tripId" />
         </div>
 
         <!-- Loading -->
@@ -90,18 +92,26 @@
 import KakaoMapView from "@/components/KakaoMapView.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import axios from "axios";
+import DiaryListNavBar from "@/components/DiaryListNavBar.vue";
 
 const route = useRoute();
 const travel = ref(null);
+const tripId = ref();
 
 // Fetch destination details
 onMounted(() => {
-  const id = route.params.id;
+  tripId.value = route.params.id;
 
-  fetch(`http://localhost:8080/api/trip/detail?tripId=${id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      travel.value = data;
+  axios
+    .get(`http://localhost:8080/api/trip/detail`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      params: { tripId: tripId.value },
+    })
+    .then((response) => {
+      travel.value = response.data;
     })
     .catch((error) => {
       console.error("데이터를 가져오는 데 실패했습니다.", error);

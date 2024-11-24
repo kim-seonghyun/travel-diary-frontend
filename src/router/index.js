@@ -6,6 +6,14 @@ import Register from "@/views/Register.vue";
 import TravelDetail from "@/views/TravelDetail.vue";
 import SearchTravel from "@/views/SearchTravel.vue";
 import Mypage from "@/views/Mypage.vue";
+import TravelDiary from "@/components/TravelDiary.vue";
+import QuestionList from "@/components/qna/QuestionList.vue";
+import QuestionDetail from "@/components/qna/QuestionDetail.vue";
+import QuestionCreate from "@/components/qna/QuestionCreate.vue";
+import DotoriStore from "@/views/DotoriStore.vue";
+import PaymentSuccess from "@/views/PaymentSuccess.vue";
+// import PostList from "@/components/posts/PostList.vue";
+import CreatePost from "@/components/posts/CreatePost.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +22,32 @@ const router = createRouter({
       path: "/",
       name: "Main",
       component: Main,
+      children: [
+        {
+          path: "/travel-diary",
+          component: TravelDiary,
+        },
+        // {
+        //   path: "/post-list",
+        //   component: PostList,
+        // },
+        {
+          path: "question-list",
+          component: QuestionList,
+        },
+        {
+          path: "question-detail/:id",
+          component: QuestionDetail,
+        },
+        {
+          path: "question/register",
+          component: QuestionCreate,
+        },
+        {
+          path: "/post/create",
+          component: CreatePost,
+        },
+      ],
     },
     {
       path: "/login",
@@ -39,6 +73,16 @@ const router = createRouter({
       path: "/user/mypage",
       name: "userMypage",
       component: Mypage,
+    },
+    {
+      path: "/store/dotori",
+      name: "storeDotori",
+      component: DotoriStore,
+    },
+    {
+      path: "/payment/success",
+      name: "paymentSuccess",
+      component: PaymentSuccess,
     },
   ],
 });

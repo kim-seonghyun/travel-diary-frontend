@@ -1,80 +1,77 @@
 <template>
-  <div class="flex min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md p-4">
-      <h1 class="text-2xl font-semibold mb-8">#dotori</h1>
-      <nav>
-        <ul>
-          <li v-for="item in menuItems" :key="item.name" class="mb-4">
-            <a
-              :href="item.href"
-              class="flex items-center space-x-2 text-gray-600 hover:text-black"
-            >
-              <span :class="item.icon"></span>
-              <span>{{ item.name }}</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+  <div
+    class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+    style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif"
+  >
+    <div class="layout-container flex h-full grow flex-col">
+      <Header></Header>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8">
-      <!-- Header with Search -->
-      <div class="flex items-center justify-between mb-8">
-        <h2 class="text-3xl font-semibold">여행을 떠나보아요!</h2>
+      <div class="flex min-h-screen bg-gray-50">
+        <!-- Left Sidebar (Navbar) -->
+        <Navbar class="w-1000 bg-gray-200"></Navbar>
 
-        <LocateSelect v-model="locationNumber" />
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+          <!-- Header with Search -->
+          <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-semibold">여행을 떠나보아요!</h2>
 
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Search destinations"
-            class="w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
-          />
-          <button
-            @click="searchDestinations"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
-          >
-            🔍
-          </button>
-        </div>
-      </div>
+            <LocateSelect v-model="locationNumber" />
 
-      <!-- Filter Tags -->
-
-      <!-- Destinations Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div
-          v-for="destination in destinations"
-          :key="destination.id"
-          class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
-          @click="goDetail(destination.id)"
-        >
-          <img
-            :src="destination.webPageUrl"
-            alt="destination"
-            class="w-full h-40 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-semibold mb-2">
-              {{ destination.facilityName }}
-            </h3>
-            <p class="text-sm text-gray-500">{{ destination.location }}</p>
-            <p class="mt-2 font-bold text-gray-800">
-              {{ destination.roadAddress }}
-            </p>
-            <p class="text-xs text-gray-400">
-              {{ destination.phoneNumber }}
-            </p>
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Search destinations"
+                class="w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
+              />
+              <button
+                @click="searchDestinations"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+              >
+                🔍
+              </button>
+            </div>
           </div>
-        </div>
+
+          <!-- Filter Tags -->
+
+          <!-- Destinations Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div
+              v-for="destination in destinations"
+              :key="destination.id"
+              class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
+              @click="goDetail(destination.id)"
+            >
+              <img
+                :src="destination.webPageUrl"
+                alt="destination"
+                class="w-full h-40 object-cover"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-semibold mb-2">
+                  {{ destination.facilityName }}
+                </h3>
+                <p class="text-sm text-gray-500">{{ destination.location }}</p>
+                <p class="mt-2 font-bold text-gray-800">
+                  {{ destination.roadAddress }}
+                </p>
+                <p class="text-xs text-gray-400">
+                  {{ destination.phoneNumber }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
 <script setup>
+import Header from "@/components/Header.vue";
+import Navbar from "@/components/Navbar.vue";
+
 import { ref, computed, onMounted, watch } from "vue"; // computed 추가
 import axios from "axios"; // axios 임포트
 import LocateSelect from "@/components/LocateSelect.vue";
@@ -105,8 +102,18 @@ const destinations = ref([]); // 초기 상태는 빈 배열
 
 // 여행지 API에서 데이터를 가져오는 함수
 const fetchDestinations = async () => {
+  console.log(
+    "Authorization Header:",
+    axios.defaults.headers.common["Authorization"]
+  );
   try {
-    const response = await axios.get("http://localhost:8080/api/trip/search"); // 여기에 실제 API URL을 사용하세요
+    // 여행지 목록 API
+    const response = await axios.get("http://localhost:8080/api/trip/search", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+
     destinations.value = response.data; // 응답받은 데이터를 destinations 배열에 저장
     console.log("여행지 데이터:", response.data);
   } catch (error) {
@@ -116,9 +123,18 @@ const fetchDestinations = async () => {
 
 // 여행지 API에서 데이터를 가져오는 함수
 const fetchSearchByLocation = async () => {
+  console.log(
+    "Authorization Header:",
+    axios.defaults.headers.common["Authorization"]
+  );
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/trip/search/locate?locateId=${locationNumber.value}`
+      `http://localhost:8080/api/trip/search/locate?locateId=${locationNumber.value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
     ); // 여기에 실제 API URL을 사용하세요
     destinations.value = response.data; // 응답받은 데이터를 destinations 배열에 저장
     console.log("여행지 데이터:", response.data);

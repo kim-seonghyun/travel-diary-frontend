@@ -1,7 +1,10 @@
-<script setup></script>
+<script setup>
+</script>
 
 <template>
-  <div class="layout-content-container flex flex-col w-80">
+  <div
+    class="layout-content-container flex flex-col w-80 shadow-md hover:shadow-lg transition-shadow duration-300"
+  >
     <div
       class="flex h-full min-h-[700px] flex-col justify-between bg-white p-4"
     >
@@ -109,7 +112,7 @@
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              Fresh Produce
+              <router-link to="/post-list">타임라인</router-link>
             </p>
           </div>
           <div class="flex items-center gap-3 px-3 py-2">
@@ -132,7 +135,7 @@
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              Checkout
+              <router-link to="/post/create">포스트 작성</router-link>
             </p>
           </div>
         </div>
@@ -140,5 +143,4 @@
     </div>
   </div>
 </template>
-
 <style scoped></style>

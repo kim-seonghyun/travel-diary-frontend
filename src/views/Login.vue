@@ -44,36 +44,22 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
+<script setup>
+import { useAuthStore } from "@/authStore";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        const response = await axios.post(
-          `http://localhost:8080/api/user/login?email=${this.email}&password=${this.password}`,
-          {}, // POST 요청의 body 부분을 비워둡니다
-          { withCredentials: true }
-        );
+const authStore = useAuthStore();
+const router = useRouter();
+// 입력값 선언
+const email = ref("");
+const password = ref("");
 
-        console.log("로그인 성공:", response.data);
-        // 로그인 성공 후 메인 페이지로 라우팅
-        this.$router.push("/"); // '/' 경로는 홈 페이지로 라우팅
-      } catch (error) {
-        console.error(
-          "로그인 실패:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    },
-  },
+const handleLogin = async () => {
+  await authStore.login(
+    { email: email.value, password: password.value },
+    router
+  );
 };
 </script>
 
