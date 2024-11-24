@@ -26,8 +26,8 @@
         <!-- 왼쪽: 게시물 이미지 -->
         <div class="flex-1 md:max-w-md">
           <img
-              v-if="post.postImage"
-              :src="post.postImage"
+              v-if="postImage"
+              :src="postImage"
               alt="게시물 이미지"
               class="w-full h-full object-cover"
           />
@@ -39,13 +39,11 @@
           </div>
         </div>
 
-        <!-- 오른쪽: 게시물 정보 -->
         <div class="flex-1 flex flex-col justify-between p-4">
-          <!-- 사용자 정보 -->
           <div class="flex items-center mb-4">
             <img
-                v-if="post.profileImage"
-                :src="post.profileImage"
+                v-if="profileImage"
+                :src="profileImage"
                 alt="프로필 이미지"
                 class="w-12 h-12 rounded-full border border-gray-300"
             />
@@ -53,17 +51,17 @@
               <span class="text-gray-500 text-sm">N/A</span>
             </div>
             <div class="ml-3">
-              <p class="font-semibold">{{ post.username }}</p>
-              <p class="text-sm text-gray-500">{{ post.facilityName }}</p>
+              <p class="font-semibold">{{ username }}</p>
+              <p class="text-sm text-gray-500">{{ facilityName }}</p>
             </div>
           </div>
 
           <div class="mb-4">
-            <p class="text-gray-700 whitespace-pre-line">{{ post.content }}</p>
+            <p class="text-gray-700 whitespace-pre-line">{{ content }}</p>
           </div>
 
           <div class="mb-4">
-            <p class="text-sm text-gray-500">게시 시간: {{ formatTimeAgo(post.timeAgo) }}</p>
+            <p class="text-sm text-gray-500">게시 시간: {{ timeAgo }}</p>
           </div>
 
           <div class="flex space-x-4">
@@ -87,15 +85,16 @@
         <h3 class="font-semibold text-lg">댓글</h3>
         <ul>
           <li
-              v-for="(comment, index) in post.comments"
+              v-for="(comment, index) in comments"
               :key="index"
               class="border-b py-2"
           >
             <p class="font-semibold">{{ comment.username }}</p>
             <p class="text-gray-700">{{ comment.content }}</p>
+            <p class="text-xs text-gray-500">{{ new Date(comment.createdAt).toLocaleString() }}</p>
           </li>
         </ul>
-        <div v-if="!post.comments || post.comments.length === 0" class="text-gray-500">
+        <div v-if="!comments || comments.length === 0" class="text-gray-500">
           댓글이 없습니다.
         </div>
       </div>
@@ -118,7 +117,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch} from "vue";
 import axios from "axios";
 import {useAuthStore} from "@/authStore.js";
 
@@ -128,9 +127,16 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  postId: {
-    type: Number,
-    required: true,
+  id : Number,
+  username : String,
+  facilityName: String,
+  postImage : String,
+  content: String,
+  timeAgo: Number,
+  createdAt: Date,
+  profileImage: {
+    type: String,
+    default: null, // 기본값 null
   },
 });
 
@@ -138,24 +144,25 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 // 상태 변수
-const post = ref({}); // 게시물 데이터
+const comments = ref([]); // 게시물 데이터
 const isLoading = ref(false); // 로딩 상태
 const isCommentViewOpen = ref(false); // 댓글 보기 열림 상태
 const isCommentWriteOpen = ref(false); // 댓글 작성 열림 상태
 const newComment = ref(""); // 새로운 댓글 내용
-
 // 모달 닫기
 const closeModal = () => {
   emit("close");
 };
 
 // 댓글 보기 토글
-const toggleCommentView = () => {
+const toggleCommentView = async () => {
+  await fetchPostDetail();
   isCommentViewOpen.value = !isCommentViewOpen.value;
 };
 
 // 댓글 작성 토글
-const toggleCommentWrite = () => {
+const toggleCommentWrite = async () => {
+  await fetchPostDetail();
   isCommentWriteOpen.value = !isCommentWriteOpen.value;
 };
 
@@ -163,8 +170,8 @@ const toggleCommentWrite = () => {
 const fetchPostDetail = async () => {
   isLoading.value = true;
   try {
-    const response = await axios.get(`http://localhost:8080/api/post/detail/${props.postId}`);
-    post.value = response.data;
+    const response = await axios.get(`http://localhost:8080/api/post/detail/${props.id}`);
+    comments.value = response.data.comments;
   } catch (error) {
     console.error("데이터를 불러오는 중 오류가 발생했습니다:", error);
   } finally {
@@ -179,10 +186,10 @@ const submitComment = async () => {
     return;
   }
   try {
-    await axios.post(`http://localhost:8080/api/comment/${props.postId}/register`, {
+    await axios.post(`http://localhost:8080/api/comment/${props.id}/register`, {
       content: newComment.value,
       userId: authStore.user.id,
-      postId: props.postId
+      postId: props.id
     });
     alert("댓글이 작성되었습니다.");
     newComment.value = "";
@@ -193,25 +200,13 @@ const submitComment = async () => {
   }
 };
 
-watch(props.isModalOpen, (newVal) => {
-  if (newVal) {
-    fetchPostDetail();
-  }
+watch(props.isModalOpen, async (newVal) => {
+  if (newVal)
+    await fetchPostDetail();
+
 });
 
-const formatTimeAgo = (time) => {
-  if (!time) return "시간 정보 없음";
-  const diffMs = Date.now() - new Date(time).getTime();
-  const diffSec = Math.floor(diffMs / 1000);
 
-  if (diffSec < 60) return `${diffSec}초 전`;
-  const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}분 전`;
-  const diffHours = Math.floor(diffMin / 60);
-  if (diffHours < 24) return `${diffHours}시간 전`;
-  const diffDays = Math.floor(diffHours / 24);
-  return `${diffDays}일 전`;
-};
 </script>
 
 <style>
