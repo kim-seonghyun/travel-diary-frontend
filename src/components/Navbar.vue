@@ -2,7 +2,9 @@
 </script>
 
 <template>
-  <div class="layout-content-container flex flex-col w-80">
+  <div
+    class="layout-content-container flex flex-col w-80 shadow-md hover:shadow-lg transition-shadow duration-300"
+  >
     <div
       class="flex h-full min-h-[700px] flex-col justify-between bg-white p-4"
     >
@@ -141,5 +143,4 @@
     </div>
   </div>
 </template>
-
 <style scoped></style>
