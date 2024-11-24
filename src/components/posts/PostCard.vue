@@ -29,13 +29,16 @@
 
       <div class="w-full block">
         <p class="text-sm block">
-          <span class="font-semibold">{{ username }}</span> {{ content }}
+          <span class="font-semibold">{{ username }}</span> {{ content.length > 20 ? content.slice(0, 20) + '...' : content  }}
           <span class="text-xs text-gray-500 mt-2 whitespace-nowrap">
             {{ timeAgo }}</span
           >
         </p>
 
-        <p class="text-xs text-gray-500 mt-2 whitespace-nowrap">comments</p>
+        <button
+            @click="openModal(id)"
+            class="text-blue-500 underline"
+        ><p class="text-xs text-gray-500 mt-2 whitespace-nowrap">자세히 보기</p></button>
       </div>
 
 
@@ -45,6 +48,19 @@
         </div>
       </div>
     </CardFooter>
+    <PostDetail
+        :isModalOpen="isModalOpen"
+        :id="selectedPostId"
+        :post-image="postImage"
+        :content="content"
+        :username="username"
+        :facility-name="facilityName"
+        :created-at="createdAt"
+        :profile-image="profileImage"
+        :time-ago="timeAgo"
+
+        @close="isModalOpen = false"
+    />
   </Card>
 </template>
 
@@ -56,8 +72,15 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import PostDetail from "@/components/posts/PostDetail.vue";
+import {ref} from "vue";
+const isModalOpen = ref(false);
+const selectedPostId = ref(null);
 
-
+const openModal = async (id) => {
+  selectedPostId.value = id;
+  isModalOpen.value = true;
+};
 
 defineProps({
   id : Number,
@@ -66,6 +89,7 @@ defineProps({
   postImage : String,
   content: String,
   timeAgo: Date,
+  createdAt: Date,
   profileImage: {
     type: String,
     default: null, // 기본값 null

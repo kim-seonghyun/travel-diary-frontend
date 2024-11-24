@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-3xl h-screen overflow-y-scroll space-y-4">
+  <div class="w-full max-w-5xl h-screen overflow-y-scroll space-y-4">
     <PostCard
       v-for="(post, index) in posts"
       :key="index"
@@ -10,6 +10,7 @@
       :content="post.content"
       :timeAgo="post.timeAgo"
       :profile-image="post.profileImage"
+      :created-at="post.createdAt"
     />
   </div>
 </template>
@@ -34,6 +35,21 @@ const fetchPosts = async () => {
     posts.value = await Promise.all(
         response.data.map(async (post) => {
           post.profileImage = "https://via.placeholder.com/40"
+          const now = new Date();
+          const createdAtDate = new Date(post.createdAt);
+          const differenceInMilliseconds = now - createdAtDate;
+
+          const differenceInMinutes = Math.floor(differenceInMilliseconds / 60000);
+          const differenceInHours = Math.floor(differenceInMilliseconds / 3600000);
+          const differenceInDays = Math.floor(differenceInMilliseconds / 86400000);
+
+          if (differenceInMinutes < 60) {
+            post.timeAgo = `${differenceInMinutes}분 전`;
+          } else if (differenceInHours < 24) {
+            post.timeAgo = `${differenceInHours}시간 전`;
+          } else {
+            post.timeAgo = `${differenceInDays}일 전`;
+          }
           if (post.postImage) {
             post.postImage = await fetchImage(post.postImage);
           } else {
