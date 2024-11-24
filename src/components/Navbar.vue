@@ -61,7 +61,7 @@
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              포스팅
+              Travel Diary
             </p>
           </div>
           <div
@@ -86,7 +86,7 @@
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              여행기 목록
+              Travel Diary
             </p>
           </div>
           <div class="flex items-center gap-3 px-3 py-2">
