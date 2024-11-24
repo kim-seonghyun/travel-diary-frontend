@@ -1,10 +1,10 @@
 <template>
   <div class="flex justify-center items-center p-6">
     <PieChart
-      :chart-id="'travel-pie-chart'"
-      :chart-data="chartData"
-      :chart-options="chartOptions"
-      class="w-96 h-96"
+        :chart-id="'travel-pie-chart'"
+        :chart-data="chartData"
+        :chart-options="chartOptions"
+        class="w-96 h-96"
     />
   </div>
 </template>
