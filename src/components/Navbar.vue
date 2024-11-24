@@ -1,5 +1,4 @@
 <script setup>
-import HeaderMenuButton from "./HeaderMenuButton.vue";
 </script>
 
 <template>
@@ -111,7 +110,7 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              dwadaw
+              <router-link to="/post-list">타임라인</router-link>
             </p>
           </div>
           <div class="flex items-center gap-3 px-3 py-2">
@@ -134,7 +133,7 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              Checkout
+              <router-link to="/post/create">포스트 작성</router-link>
             </p>
           </div>
         </div>
