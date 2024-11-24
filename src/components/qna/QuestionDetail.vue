@@ -10,9 +10,9 @@
           <p>작성일: {{ formatDate(question.createdAt) }}</p>
         </div>
         <p class="mb-4">{{ question.body }}</p>
-        <div v-if="question.imageUrl" class="mt-4">
+        <div v-if="imageSrc" class="mt-4">
           <img
-              :src="'http://localhost:8080/images/uploads/' + question.imageUrl"
+              :src="imageSrc"
               alt="Question Image"
               class="rounded-lg border border-gray-700 w-full"
           />
@@ -34,7 +34,7 @@
           <p>작성자: {{ answer.username }}</p>
           <p>작성일: {{ formatDate(answer.createdAt) }}</p>
         </div>
-        <p class="mb-4">{{ answer.body }}</p>
+        <p class="mb-4 text-white">{{ answer.body }}</p>
 
       </div>
     </div>
@@ -93,15 +93,37 @@ const answerImageUrl = ref("");
 const answerSuccess = ref(false);
 const answerError = ref(null);
 
+const imageSrc = ref('https://via.placeholder.com/120x120')
+
 const authStore = useAuthStore();
+
+const fetchImage = async (imageUrl) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/images/uploads/${imageUrl}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+      responseType: "blob", // 이미지를 받아오기 위해 blob 형식 사용
+    });
+
+    imageSrc.value = URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("이미지 로드 실패:", error);
+    imageSrc.value = "https://via.placeholder.com/120x120"; // 실패 시 기본 이미지 표시
+  }
+};
 
 const fetchQuestion = async () => {
   loading.value = true;
   try {
     const response = await axios.get(
-        `http://localhost:8080/api/question/${id}`
+        `http://localhost:8080/api/question/${id}`, {
+          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${authStore.accessToken}` }
+          ,
+        }
     );
     question.value = response.data.question;
+    await fetchImage(question.value.imageUrl)
     answers.value = response.data.answers;
   } catch (err) {
     error.value = "질문을 불러오는 데 실패했습니다.";
@@ -126,8 +148,12 @@ const submitAnswer = async () => {
   try {
     const response =await axios.post(
         `http://localhost:8080/api/question/${id}/answer`,
-        payload
+        payload , {
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${authStore.accessToken}` }
+          ,
+        }
     );
+    console.log(response.data)
     answers.value.push(response.data);
     answerSuccess.value = true;
     answerError.value = null;
