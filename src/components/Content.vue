@@ -17,7 +17,7 @@ export default {
       <p
         class="text-[#111418] tracking-light text-[32px] font-bold leading-tight min-w-72"
       >
-        Travel Diary
+        여행기 목록
       </p>
     </div>
     <div class="px-4 py-3">
