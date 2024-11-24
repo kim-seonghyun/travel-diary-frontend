@@ -1,7 +1,7 @@
 <template>
   <div
-    class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
-    style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif"
+      class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+      style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif"
   >
     <div class="layout-container flex h-full grow flex-col">
       <Header></Header>
@@ -20,13 +20,13 @@
 
             <div class="relative">
               <input
-                type="text"
-                placeholder="Search destinations"
-                class="w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
+                  type="text"
+                  placeholder="Search destinations"
+                  class="w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
               />
               <button
-                @click="searchDestinations"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  @click="searchDestinations"
+                  class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
               >
                 🔍
               </button>
@@ -38,15 +38,15 @@
           <!-- Destinations Grid -->
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div
-              v-for="destination in destinations"
-              :key="destination.id"
-              class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
-              @click="goDetail(destination.id)"
+                v-for="destination in destinations"
+                :key="destination.id"
+                class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
+                @click="goDetail(destination.id)"
             >
               <img
-                :src="destination.webPageUrl"
-                alt="destination"
-                class="w-full h-40 object-cover"
+                  :src="destination.webPageUrl"
+                  alt="destination"
+                  class="w-full h-40 object-cover"
               />
               <div class="p-4">
                 <h3 class="text-lg font-semibold mb-2">
@@ -103,8 +103,8 @@ const destinations = ref([]); // 초기 상태는 빈 배열
 // 여행지 API에서 데이터를 가져오는 함수
 const fetchDestinations = async () => {
   console.log(
-    "Authorization Header:",
-    axios.defaults.headers.common["Authorization"]
+      "Authorization Header:",
+      axios.defaults.headers.common["Authorization"]
   );
   try {
     // 여행지 목록 API
@@ -124,17 +124,17 @@ const fetchDestinations = async () => {
 // 여행지 API에서 데이터를 가져오는 함수
 const fetchSearchByLocation = async () => {
   console.log(
-    "Authorization Header:",
-    axios.defaults.headers.common["Authorization"]
+      "Authorization Header:",
+      axios.defaults.headers.common["Authorization"]
   );
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/trip/search/locate?locateId=${locationNumber.value}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      }
+        `http://localhost:8080/api/trip/search/locate?locateId=${locationNumber.value}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
     ); // 여기에 실제 API URL을 사용하세요
     destinations.value = response.data; // 응답받은 데이터를 destinations 배열에 저장
     console.log("여행지 데이터:", response.data);
