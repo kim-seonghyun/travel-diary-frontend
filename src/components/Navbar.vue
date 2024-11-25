@@ -1,10 +1,9 @@
 <script setup>
-import HeaderMenuButton from "./HeaderMenuButton.vue";
 </script>
 
 <template>
   <div
-      class="layout-content-container flex flex-col w-70 shadow-md hover:shadow-lg transition-shadow duration-300 fixed left-0 top-0 h-full"
+      class="layout-content-container flex flex-col w-80 shadow-md hover:shadow-lg transition-shadow duration-300"
   >
     <div
         class="flex h-full min-h-[700px] flex-col justify-between bg-white p-4"
