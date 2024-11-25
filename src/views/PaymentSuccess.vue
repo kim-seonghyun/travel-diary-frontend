@@ -71,10 +71,12 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useAuthStore } from "@/authStore";
+import { useRouter } from "vue-router"; // Vue Router에서 useRouter 가져오기
 import axios from "axios";
 
 export default {
   setup() {
+    const router = useRouter();
     const paymentKey = ref("");
     const orderId = ref("");
     const amount = ref("");
@@ -111,6 +113,7 @@ export default {
 
         if (response.status === 200) {
           isLoading.value = false;
+          router.push("/store/dotori"); // 홈으로 이동
         } else {
           console.log(
             `Payment confirmation failed with status: ${response.status}`
