@@ -13,6 +13,7 @@ import DotoriStore from "@/views/DotoriStore.vue";
 import PaymentSuccess from "@/views/PaymentSuccess.vue";
 import PostList from "@/components/posts/PostList.vue";
 import CreatePost from "@/components/posts/CreatePost.vue";
+import ResetPassword from "@/views/ResetPassword.vue";
 import Content from "@/components/Content.vue";
 import TravelDiaryForm from "@/components/travel-diary/TravelDiaryForm.vue";
 
@@ -89,7 +90,11 @@ const router = createRouter({
       name: "paymentSuccess",
       component: PaymentSuccess,
     },
+    {
+      path: "/reset/password",
+      name: "resetPassword",
+      component: ResetPassword,
+    },
   ],
 });
-
 export default router;
