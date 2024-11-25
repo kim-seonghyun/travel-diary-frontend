@@ -32,60 +32,44 @@ import {ref, onMounted} from 'vue';
 import axios from 'axios';
 import TravelDiaryCard from "@/components/travel-diary/TravelDiaryCard.vue";
 
-const diaries = ref([  // 실제 데이터 목록
-  {
-    "id": 1,
-    "title": "무진장 단독 상품만 골랐다",
-    "description": "패딩 vs 패딩 코트",
-    "userId": 1,
-    "username": "user1",
-    "createdAt": "2024-11-24",
-    "imageName": "https://source.unsplash.com/random/800x600"
-  },
-  {
-    "id": 2,
-    "title": "무진장 업고 뛴 패션 에디터",
-    "description": "볼프 독립리스트 소개",
-    "username": "user2",
-    "createdAt": "2024-11-24",
-    "imageName": "https://source.unsplash.com/random/800x600"
-  },{
-    "id": 3,
-    "title": "무진장 업고 뛴 패션 에디터",
-    "description": "볼프 독립리스트 소개",
-    "username": "user2",
-    "createdAt": "2024-11-24",
-    "imageName": "https://source.unsplash.com/random/800x600"
-  },{
-    "id": 4,
-    "title": "무진장 업고 뛴 패션 에디터",
-    "description": "볼프 독립리스트 소개",
-    "username": "user2",
-    "createdAt": "2024-11-24",
-    "imageName": "https://source.unsplash.com/random/800x600"
-  },{
-    "id": 5,
-    "title": "무진장 업고 뛴 패션 에디터",
-    "description": "볼프 독립리스트 소개",
-    "username": "user2",
-    "createdAt": "2024-11-24",
-    "imageName": "https://source.unsplash.com/random/800x600"
-  }
-
-]);
+const diaries = ref([]);
 const loading = ref(false);
 
 const fetchDiaries = async () => {
   try {
     loading.value = true;
     const response = await axios.get(
-        `http:localhost:8080/api/travel-diary/list`
+        `http://localhost:8080/api/travel-diary/list`
     );
-    diaries.value.push(...response.data);
+    console.log(response.data);
+    diaries.value = await Promise.all(
+        response.data.map(async (diary) => {
+          if (diary.imageName) {
+            diary.imageName = await fetchImage(diary.imageName);
+          } else {
+            diary.imageName = "https://via.placeholder.com/120x120";
+          }
+          return diary;
+        })
+    );
+    loading.value = false;
+
     loading.value = false;
   } catch (error) {
     console.error("Error fetching diaries:", error);
     loading.value = false;
+  }
+};
+
+const fetchImage = async (imageUrl) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/images/uploads/${imageUrl}`, {
+      responseType: "blob",
+    });
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("이미지 로드 실패:", error);
+    return "https://via.placeholder.com/120x120";
   }
 };
 
