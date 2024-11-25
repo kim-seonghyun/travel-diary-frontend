@@ -1,7 +1,7 @@
 <!-- PostCard.vue -->
 <template>
   <Card
-      class="w-full max-w-md m-auto border rounded-lg shadow-sm overflow-hidden relative"
+      class="mb-6 p-6 bg-gray-25 rounded-lg shadow-lg transform transition-transform hover:scale-105"
   >
     <!-- 사용자 정보와 이미지 상단 부분 -->
     <CardHeader class="flex items-center p-4">
@@ -57,6 +57,7 @@
 
   </Card>
   <PostDetail
+      v-if="isModalOpen"
       :isModalOpen="isModalOpen"
       :id="selectedPostId"
       :post-image="postImage"
@@ -71,6 +72,8 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       @close="isModalOpen = false"
   />
+
+
 </template>
 
 <script setup>
@@ -91,6 +94,7 @@ const openModal = async (id) => {
   selectedPostId.value = id;
   isModalOpen.value = true;
   await incrementViewCount(id);
+
 };
 const incrementViewCount = async (id) => {
   try {

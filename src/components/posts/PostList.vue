@@ -1,7 +1,7 @@
 <template>
 
-  <div class="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden px-8 py-6" style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif">
-    <PostCard class="mb-6 p-6 bg-gray-25 rounded-lg shadow-lg transform transition-transform hover:scale-105"
+  <div class="relative min-h-screen flex-col bg-white group/design-root overflow-x-hidden px-8 py-6" style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif">
+    <PostCard
       v-for="(post, index) in posts"
       :key="index"
       :id="post.id"
