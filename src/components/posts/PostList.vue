@@ -12,6 +12,7 @@
       :profile-image="post.profileImage"
       :created-at="post.createdAt"
       :views-count="post.viewsCount"
+      :post-likes="post.postLikes"
     />
   </div>
 </template>

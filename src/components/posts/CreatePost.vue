@@ -86,8 +86,7 @@ import { useAuthStore} from "@/authStore.js";
 // authStore에서 사용자 ID 가져오기
 const authStore = useAuthStore();
 const userId = authStore.user.id;
-const imageFile = ref(null); // 선택된 이미지 파일
-// 폼 데이터 및 여행 리스트 관리
+const imageFile = ref(null);
 const post = ref({
   tripId: "",
   content: "",
@@ -115,13 +114,8 @@ const filteredTrips = computed(() => {
 
 // 서버에서 여행 데이터 불러오기
 const fetchTrips = async () => {
-
   try {
-    const response = await axios.get("http://localhost:8080/api/trip/search",{
-      headers: {
-        Authorization: `Bearer ${authStore.accessToken}`,
-      },
-    }); // 여행 데이터 API
+    const response = await axios.get("http://localhost:8080/api/trip/search-all"); // 여행 데이터 API
     trips.value = response.data;
   } catch (error) {
     console.error("여행 데이터를 불러오는 중 오류 발생:", error);
@@ -130,7 +124,7 @@ const fetchTrips = async () => {
 
 
 const submitPost = async () => {
-  const user = JSON.parse(authStore.user)
+  const user = authStore.user
   try {
     const formData = new FormData();
     const request = {
@@ -143,12 +137,10 @@ const submitPost = async () => {
 
 
      await axios.post("http://localhost:8080/api/post/regist", formData, {
-      headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${authStore.accessToken}` }
-      ,
-    });
+      headers: { "Content-Type": "multipart/form-data"}
+     });
 
     alert("포스트가 성공적으로 등록되었습니다!");
-    // console.log(response.data);
   } catch (error) {
     alert("포스트 등록 중 오류가 발생했습니다.");
     console.error(error);

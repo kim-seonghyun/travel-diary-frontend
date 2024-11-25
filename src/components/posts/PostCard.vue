@@ -46,11 +46,12 @@
 
 
         <div class="flex space-x-3">
-          <button class="text-gray-600 hover:text-gray-800">❤️</button>
+          <button @click="incrementLikesCount(id)" class="text-xs text-gray-500 mt-2 whitespace-nowrap">❤️ :  {{postLikes}}</button>
+          <p class="text-xs text-gray-500 mt-2 whitespace-nowrap">
+            조회수 : {{ viewsCount }} </p
+          >
         </div>
-        <span class="text-xs text-gray-500 mt-2 whitespace-nowrap">
-            조회수 : {{ viewsCount }} </span
-        >
+
       </div>
     </CardFooter>
     <PostDetail
@@ -63,7 +64,8 @@
         :created-at="createdAt"
         :profile-image="profileImage"
         :time-ago="timeAgo"
-
+        :post-likes="postLikes"
+        :views-count="viewsCount"
         @close="isModalOpen = false"
     />
   </Card>
@@ -95,6 +97,15 @@ const incrementViewCount = async (id) => {
     console.error("조회수 증가 중 오류가 발생했습니다:", error);
   }
 };
+
+const incrementLikesCount = async (id) => {
+  try {
+    await axios.get(`http://localhost:8080/api/post/${id}/increment-likes`);
+  } catch (error) {
+    console.error("좋아요 수 증가 중 오류가 발생했습니다:", error);
+  }
+};
+
 defineProps({
   id : Number,
   username : String,
@@ -104,6 +115,7 @@ defineProps({
   timeAgo: Date,
   createdAt: Date,
   viewsCount: Number,
+  postLikes: Number,
   profileImage: {
     type: String,
     default: null, // 기본값 null
