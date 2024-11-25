@@ -64,7 +64,8 @@
         :created-at="createdAt"
         :profile-image="profileImage"
         :time-ago="timeAgo"
-
+        :post-likes="postLikes"
+        :views-count="viewsCount"
         @close="isModalOpen = false"
     />
   </Card>

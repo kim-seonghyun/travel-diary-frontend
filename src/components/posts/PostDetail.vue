@@ -53,6 +53,8 @@
             <div class="ml-3">
               <p class="font-semibold">{{ username }}</p>
               <p class="text-sm text-gray-500">{{ facilityName }}</p>
+              <p class="text-xs text-gray-500">좋아요 : {{ postLikes }}</p>
+              <p class="text-xs text-gray-500">조회수 : {{ viewsCount }}</p>
             </div>
           </div>
 
@@ -121,7 +123,6 @@ import { ref, watch} from "vue";
 import axios from "axios";
 import {useAuthStore} from "@/authStore.js";
 
-// props: 부모 컴포넌트에서 전달받는 모달 상태와 게시물 ID
 const props = defineProps({
   isModalOpen: {
     type: Boolean,
@@ -134,6 +135,8 @@ const props = defineProps({
   content: String,
   timeAgo: Number,
   createdAt: Date,
+  postLikes: Number,
+  viewsCount: Number,
   profileImage: {
     type: String,
     default: null, // 기본값 null
