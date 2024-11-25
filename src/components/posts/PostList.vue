@@ -1,6 +1,7 @@
 <template>
-  <div class="w-full max-w-5xl h-screen overflow-y-scroll space-y-4">
-    <PostCard
+
+  <div class="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden px-8 py-6" style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif">
+    <PostCard class="mb-6 p-6 bg-gray-25 rounded-lg shadow-lg transform transition-transform hover:scale-105"
       v-for="(post, index) in posts"
       :key="index"
       :id="post.id"
@@ -14,6 +15,24 @@
       :views-count="post.viewsCount"
       :post-likes="post.postLikes"
     />
+    <!-- 우측 하단에 버튼 아이콘 추가 -->
+    <router-link
+        to="/post/create"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 z-50"
+    >
+      <svg
+          class="w-6 h-6"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+      >
+        <!-- 플러스 아이콘 SVG 코드 -->
+        <path
+            fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"
+        />
+      </svg>
+    </router-link>
   </div>
 </template>
 
@@ -88,6 +107,10 @@ const fetchImage = async (imageUrl) => {
 onMounted(()=>{
   fetchPosts()
 })
+
+const goToPostForm = () => {
+  router.push('/post-form');
+};
 
 defineOptions({
   name: "PostList",

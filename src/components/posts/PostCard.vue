@@ -1,7 +1,7 @@
 <!-- PostCard.vue -->
 <template>
   <Card
-    class="w-full max-w-md m-auto border rounded-lg shadow-sm overflow-hidden"
+      class="w-full max-w-md m-auto border rounded-lg shadow-sm overflow-hidden relative"
   >
     <!-- 사용자 정보와 이미지 상단 부분 -->
     <CardHeader class="flex items-center p-4">
@@ -54,21 +54,23 @@
 
       </div>
     </CardFooter>
-    <PostDetail
-        :isModalOpen="isModalOpen"
-        :id="selectedPostId"
-        :post-image="postImage"
-        :content="content"
-        :username="username"
-        :facility-name="facilityName"
-        :created-at="createdAt"
-        :profile-image="profileImage"
-        :time-ago="timeAgo"
-        :post-likes="postLikes"
-        :views-count="viewsCount"
-        @close="isModalOpen = false"
-    />
+
   </Card>
+  <PostDetail
+      :isModalOpen="isModalOpen"
+      :id="selectedPostId"
+      :post-image="postImage"
+      :content="content"
+      :username="username"
+      :facility-name="facilityName"
+      :created-at="createdAt"
+      :profile-image="profileImage"
+      :time-ago="timeAgo"
+      :post-likes="postLikes"
+      :views-count="viewsCount"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      @close="isModalOpen = false"
+  />
 </template>
 
 <script setup>
