@@ -63,7 +63,7 @@
             <p v-if="activeTab === 'faq'" class="text-gray-600">
               <h2>1000 원 입니다!</h2>
               도토리 10개를 구매합니다!
-              <button @click="tosspayment(2000)"> 간편 결제하기</button>
+              <button @click="tosspayment(1000)"> 간편 결제하기</button>
             </p>
             <p v-if="activeTab === 'inquiry'" class="text-gray-600">
               <h2>4000 원 입니다!</h2>
