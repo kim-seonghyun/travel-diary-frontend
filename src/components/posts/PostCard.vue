@@ -31,21 +31,26 @@
         <p class="text-sm block">
           <span class="font-semibold">{{ username }}</span> {{ content.length > 20 ? content.slice(0, 20) + '...' : content  }}
           <span class="text-xs text-gray-500 mt-2 whitespace-nowrap">
-            {{ timeAgo }}</span
+            {{ timeAgo }} </span
           >
         </p>
 
         <button
             @click="openModal(id)"
             class="text-blue-500 underline"
-        ><p class="text-xs text-gray-500 mt-2 whitespace-nowrap">자세히 보기</p></button>
+        ><p class="text-xs text-gray-500 mt-2 whitespace-nowrap">자세히 보기 </p> </button>
       </div>
 
 
       <div class="flex items-center justify-between mb-">
+
+
         <div class="flex space-x-3">
           <button class="text-gray-600 hover:text-gray-800">❤️</button>
         </div>
+        <span class="text-xs text-gray-500 mt-2 whitespace-nowrap">
+            조회수 : {{ viewsCount }} </span
+        >
       </div>
     </CardFooter>
     <PostDetail
@@ -74,14 +79,22 @@ import {
 } from "@/components/ui/card";
 import PostDetail from "@/components/posts/PostDetail.vue";
 import {ref} from "vue";
+import axios from "axios";
 const isModalOpen = ref(false);
 const selectedPostId = ref(null);
 
 const openModal = async (id) => {
   selectedPostId.value = id;
   isModalOpen.value = true;
+  await incrementViewCount(id);
 };
-
+const incrementViewCount = async (id) => {
+  try {
+    await axios.get(`http://localhost:8080/api/post/${id}/increment-view`);
+  } catch (error) {
+    console.error("조회수 증가 중 오류가 발생했습니다:", error);
+  }
+};
 defineProps({
   id : Number,
   username : String,
@@ -90,6 +103,7 @@ defineProps({
   content: String,
   timeAgo: Date,
   createdAt: Date,
+  viewsCount: Number,
   profileImage: {
     type: String,
     default: null, // 기본값 null

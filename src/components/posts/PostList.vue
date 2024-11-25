@@ -11,6 +11,7 @@
       :timeAgo="post.timeAgo"
       :profile-image="post.profileImage"
       :created-at="post.createdAt"
+      :views-count="post.viewsCount"
     />
   </div>
 </template>
