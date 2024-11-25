@@ -2,29 +2,31 @@
   <!-- 배경이 어두운 모달 -->
   <div
       v-if="isModalOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center"
   >
-    <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full">
-      <!-- 상단 닫기 버튼 -->
-      <div class="flex justify-between items-center px-4 py-2 border-b">
-        <h2 class="text-lg font-semibold">게시물 상세보기</h2>
+    <div class="bg-white rounded-2xl shadow-xl max-w-3xl w-full overflow-hidden">
+      <!-- 상단 헤더 -->
+      <div class="flex justify-between items-center px-6 py-4 border-b">
+        <h2 class="text-xl font-bold text-gray-900">게시물 상세보기</h2>
         <button
             @click="closeModal"
-            class="text-gray-500 hover:text-gray-700"
+            class="text-gray-500 hover:text-gray-700 focus:outline-none"
         >
-          ✕
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
         </button>
       </div>
 
       <!-- 로딩 중 표시 -->
-      <div v-if="isLoading" class="p-4 text-center">
-        <p>데이터를 불러오는 중입니다...</p>
+      <div v-if="isLoading" class="p-6 text-center">
+        <p class="text-gray-500">데이터를 불러오는 중입니다...</p>
       </div>
 
       <!-- 게시물 내용 -->
       <div v-else class="flex flex-col md:flex-row">
         <!-- 왼쪽: 게시물 이미지 -->
-        <div class="flex-1 md:max-w-md">
+        <div class="flex-1 md:max-w-md bg-gray-100">
           <img
               v-if="postImage"
               :src="postImage"
@@ -33,67 +35,69 @@
           />
           <div
               v-else
-              class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500"
+              class="w-full h-full flex items-center justify-center text-gray-500"
           >
             이미지가 없습니다.
           </div>
         </div>
 
-        <div class="flex-1 flex flex-col justify-between p-4">
-          <div class="flex items-center mb-4">
+        <!-- 오른쪽: 게시물 상세 내용 -->
+        <div class="flex-1 flex flex-col justify-between p-6">
+          <!-- 사용자 정보 -->
+          <div class="flex items-center mb-6">
             <img
                 v-if="profileImage"
                 :src="profileImage"
                 alt="프로필 이미지"
-                class="w-12 h-12 rounded-full border border-gray-300"
+                class="w-14 h-14 rounded-full mr-4"
             />
-            <div v-else class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+            <div v-else class="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center mr-4">
               <span class="text-gray-500 text-sm">N/A</span>
             </div>
-            <div class="ml-3">
-              <p class="font-semibold">{{ username }}</p>
+            <div>
+              <p class="font-semibold text-gray-900 text-lg">{{ username }}</p>
               <p class="text-sm text-gray-500">{{ facilityName }}</p>
-              <p class="text-xs text-gray-500">좋아요 : {{ postLikes }}</p>
-              <p class="text-xs text-gray-500">조회수 : {{ viewsCount }}</p>
             </div>
           </div>
 
-          <div class="mb-4">
-            <p class="text-gray-700 whitespace-pre-line">{{ content }}</p>
+          <!-- 게시물 내용 -->
+          <div class="mb-6">
+            <p class="text-gray-800 leading-relaxed whitespace-pre-line">{{ content }}</p>
           </div>
 
-          <div class="mb-4">
-            <p class="text-sm text-gray-500">게시 시간: {{ timeAgo }}</p>
-          </div>
-
-          <div class="flex space-x-4">
-            <button
-                @click="toggleCommentView"
-                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              댓글 보기
-            </button>
-            <button
-                @click="toggleCommentWrite"
-                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              댓글 작성
-            </button>
+          <!-- 게시 시간 및 액션 버튼 -->
+          <div>
+            <p class="text-sm text-gray-400 mb-4">게시 시간: {{ timeAgo }}</p>
+            <div class="flex space-x-4">
+              <button
+                  @click="toggleCommentView"
+                  class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 focus:outline-none"
+              >
+                댓글 보기
+              </button>
+              <button
+                  @click="toggleCommentWrite"
+                  class="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 focus:outline-none"
+              >
+                댓글 작성
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div v-if="isCommentViewOpen" class="p-4 border-t">
-        <h3 class="font-semibold text-lg">댓글 {{ comments.length }}</h3>
-        <ul>
+      <!-- 댓글 보기 섹션 -->
+      <div v-if="isCommentViewOpen" class="p-6 border-t max-h-64 overflow-y-auto">
+        <h3 class="font-semibold text-lg text-gray-900 mb-4">댓글 {{ comments.length }}</h3>
+        <ul class="space-y-4">
           <li
               v-for="(comment, index) in comments"
               :key="index"
-              class="border-b py-2"
+              class="border-b pb-4"
           >
-            <p class="font-semibold">{{ comment.username }}</p>
+            <p class="font-semibold text-gray-800">{{ comment.username }}</p>
             <p class="text-gray-700">{{ comment.content }}</p>
-            <p class="text-xs text-gray-500">{{ new Date(comment.createdAt).toLocaleString() }}</p>
+            <p class="text-xs text-gray-400">{{ new Date(comment.createdAt).toLocaleString() }}</p>
           </li>
         </ul>
         <div v-if="!comments || comments.length === 0" class="text-gray-500">
@@ -101,15 +105,17 @@
         </div>
       </div>
 
-      <div v-if="isCommentWriteOpen" class="p-4 border-t">
+      <!-- 댓글 작성 섹션 -->
+      <div v-if="isCommentWriteOpen" class="p-6 border-t">
         <textarea
             v-model="newComment"
-            class="w-full p-2 border rounded"
+            class="w-full p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="댓글을 작성하세요..."
+            rows="4"
         ></textarea>
         <button
             @click="submitComment"
-            class="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            class="mt-4 w-full px-4 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 focus:outline-none"
         >
           댓글 작성
         </button>
@@ -119,57 +125,53 @@
 </template>
 
 <script setup>
-import { ref, watch} from "vue";
+import { ref, watch } from "vue";
 import axios from "axios";
-import {useAuthStore} from "@/authStore.js";
+import { useAuthStore } from "@/authStore.js";
 
 const props = defineProps({
   isModalOpen: {
     type: Boolean,
     required: true,
   },
-  id : Number,
-  username : String,
+  id: Number,
+  username: String,
   facilityName: String,
-  postImage : String,
+  postImage: String,
   content: String,
-  timeAgo: Number,
+  timeAgo: String,
   createdAt: Date,
   postLikes: Number,
   viewsCount: Number,
   profileImage: {
     type: String,
-    default: null, // 기본값 null
+    default: null,
   },
 });
 
-// 이벤트: 부모 컴포넌트로 닫기 이벤트를 전달
 const emit = defineEmits(["close"]);
 
-// 상태 변수
-const comments = ref([]); // 게시물 데이터
-const isLoading = ref(false); // 로딩 상태
-const isCommentViewOpen = ref(false); // 댓글 보기 열림 상태
-const isCommentWriteOpen = ref(false); // 댓글 작성 열림 상태
-const newComment = ref(""); // 새로운 댓글 내용
-// 모달 닫기
+const comments = ref([]);
+const isLoading = ref(false);
+const isCommentViewOpen = ref(false);
+const isCommentWriteOpen = ref(false);
+const newComment = ref("");
+
 const closeModal = () => {
   emit("close");
 };
 
-// 댓글 보기 토글
 const toggleCommentView = async () => {
   await fetchPostDetail();
   isCommentViewOpen.value = !isCommentViewOpen.value;
+  isCommentWriteOpen.value = false;
 };
 
-// 댓글 작성 토글
 const toggleCommentWrite = async () => {
-  await fetchPostDetail();
   isCommentWriteOpen.value = !isCommentWriteOpen.value;
+  isCommentViewOpen.value = false;
 };
 
-// 서버에서 데이터를 불러오는 함수
 const fetchPostDetail = async () => {
   isLoading.value = true;
   try {
@@ -181,8 +183,9 @@ const fetchPostDetail = async () => {
     isLoading.value = false;
   }
 };
-const authStore = useAuthStore()
-// 댓글 작성
+
+const authStore = useAuthStore();
+
 const submitComment = async () => {
   if (!newComment.value.trim()) {
     alert("댓글 내용을 입력해주세요.");
@@ -192,11 +195,13 @@ const submitComment = async () => {
     await axios.post(`http://localhost:8080/api/comment/${props.id}/register`, {
       content: newComment.value,
       userId: authStore.user.id,
-      postId: props.id
+      postId: props.id,
     });
     alert("댓글이 작성되었습니다.");
     newComment.value = "";
-    await fetchPostDetail(); // 댓글 목록 갱신
+    await fetchPostDetail();
+    isCommentWriteOpen.value = false;
+    isCommentViewOpen.value = true;
   } catch (error) {
     console.error("댓글 작성 중 오류가 발생했습니다:", error);
     alert("댓글 작성에 실패했습니다.");
@@ -204,14 +209,10 @@ const submitComment = async () => {
 };
 
 watch(props.isModalOpen, async (newVal) => {
-  if (newVal)
-    await fetchPostDetail();
-
+  if (newVal) await fetchPostDetail();
 });
-
-
 </script>
 
 <style>
-/* Tailwind CSS를 사용하기 때문에 추가적인 스타일링이 필요하지 않음 */
+/* 추가적인 스타일은 필요하지 않습니다. Tailwind CSS를 활용합니다. */
 </style>
