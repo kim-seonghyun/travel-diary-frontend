@@ -4,7 +4,7 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
 
 <template>
   <div
-      class="layout-content-container flex flex-col w-80 shadow-md hover:shadow-lg transition-shadow duration-300"
+      class="layout-content-container flex flex-col w-70 shadow-md hover:shadow-lg transition-shadow duration-300 fixed left-0 top-0 h-full"
   >
     <div
         class="flex h-full min-h-[700px] flex-col justify-between bg-white p-4"
@@ -18,7 +18,7 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
             "
           ></div>
           <h1 class="text-[#111418] text-base font-medium leading-normal">
-            #Dotori
+             <router-link to="/">#Dotori</router-link>
           </h1>
         </div>
         <div class="flex flex-col gap-2">
@@ -90,7 +90,7 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
               </svg>
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
-              여행기 목록
+              <router-link to="/travel-diary">여행기 목록</router-link>
             </p>
           </div>
           <div class="flex items-center gap-3 px-3 py-2">
@@ -137,7 +137,6 @@ import HeaderMenuButton from "./HeaderMenuButton.vue";
             </div>
             <p class="text-[#111418] text-sm font-medium leading-normal">
               <router-link to="/post/create">포스트 작성</router-link>
-              포스팅
             </p>
           </div>
         </div>
