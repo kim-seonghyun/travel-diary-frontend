@@ -82,7 +82,7 @@
       </div>
 
       <div v-if="isCommentViewOpen" class="p-4 border-t">
-        <h3 class="font-semibold text-lg">댓글</h3>
+        <h3 class="font-semibold text-lg">댓글 {{ comments.length }}</h3>
         <ul>
           <li
               v-for="(comment, index) in comments"
