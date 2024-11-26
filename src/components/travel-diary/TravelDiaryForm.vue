@@ -107,6 +107,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useAuthStore } from '@/authStore.js';
+import {useRouter} from "vue-router";
 
 const authStore = useAuthStore();
 const posts = ref([]);
@@ -148,6 +149,7 @@ const handleImageUpload = (event) => {
   }
 };
 
+const router = useRouter();
 const submitForm = async () => {
   try {
     const formData = new FormData();
@@ -171,6 +173,7 @@ const submitForm = async () => {
     });
 
     alert('포스트를 성공적으로 만들었습니다.');
+    await router.push("/travel-diary");
   } catch (error) {
     alert('Failed to create post!');
     console.error('Error submitting form:', error);

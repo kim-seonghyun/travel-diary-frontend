@@ -15,7 +15,6 @@
       :views-count="post.viewsCount"
       :post-likes="post.postLikes"
     />
-    <!-- 우측 하단에 버튼 아이콘 추가 -->
     <router-link
         to="/post/create"
         class="fixed bottom-6 right-6 w-14 h-14 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 z-50"
@@ -25,7 +24,6 @@
           fill="currentColor"
           viewBox="0 0 20 20"
       >
-        <!-- 플러스 아이콘 SVG 코드 -->
         <path
             fill-rule="evenodd"
             d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
@@ -44,9 +42,16 @@ import {onMounted, ref} from "vue";
 import axios from "axios";
 import {useAuthStore} from "@/authStore.js";
 
+const props = defineProps({
+  posts: {
+    type: Array,
+    required: false,
+  },
+});
+
+const posts = ref(props.posts || []);
 const loading = ref(false);
 const error = ref(null);
-const posts = ref([])
 const authStore = useAuthStore()
 const fetchPosts = async () => {
   loading.value = true;
@@ -104,14 +109,11 @@ const fetchImage = async (imageUrl) => {
   }
 };
 
-onMounted(()=>{
-  fetchPosts()
-})
-
-const goToPostForm = () => {
-  router.push('/post-form');
-};
-
+onMounted(() => {
+  if (!posts.value.length) {
+    fetchPosts();
+  }
+});
 defineOptions({
   name: "PostList",
 });

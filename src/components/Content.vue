@@ -3,11 +3,12 @@
 <script>
 import TagList from "@/components/TagList.vue";
 import TravelDiary from "@/components/travel-diary/TravelDiary.vue";
+
 export default {
-  name: "TravelDiary",
+  name: "Content",
   components: {
     TagList,
-    TravelDiary,
+    TravelDiary
   },
 };
 </script>
