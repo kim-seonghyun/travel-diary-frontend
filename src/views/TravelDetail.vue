@@ -1,95 +1,103 @@
 <template>
-  <div class="flex min-h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md p-4">
-      <h1 class="text-2xl font-semibold mb-8 text-blue-600">#dotori</h1>
-      <nav>
-        <ul>
-          <li v-for="item in menuItems" :key="item.name" class="mb-4">
-            <a
-              :href="item.href"
-              class="flex items-center space-x-3 text-gray-600 hover:text-blue-600 transition duration-200"
-            >
-              <span :class="item.icon" class="text-xl"></span>
-              <span class="text-base font-medium">{{ item.name }}</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+  <div
+    class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+    style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif"
+  >
+    <div class="layout-container flex h-full grow flex-col">
+      <Header></Header>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8">
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-8">
-        <h2 class="text-3xl font-semibold text-gray-800">목적지 상세 정보</h2>
-      </div>
+      <div class="flex justify-center bg-gray-50">
+        <!-- Main Container -->
+        <div
+          class="w-full max-w-7xl flex flex-col lg:flex-row min-h-screen px-8"
+        >
+          <!-- Left Sidebar (Navbar) -->
+          <Navbar class="w-80 bg-gray-200"></Navbar>
 
-      <!-- Destination Detail -->
-      <div class="container mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <div v-if="travel">
-          <!-- Image -->
-          <img
-            :src="travel.webPageUrl"
-            alt="destination"
-            class="w-full h-96 object-cover rounded-lg mb-6"
-          />
+          <!-- Main Content -->
+          <main class="flex-1 p-8 bg-white rounded-lg shadow-md">
+            <!-- Destination Detail -->
+            <div v-if="travel" class="space-y-6">
+              <!-- Image Section -->
+              <div class="relative w-full h-96 rounded-lg overflow-hidden">
+                <img
+                  :src="travel.webPageUrl"
+                  alt="destination"
+                  class="w-full h-full object-cover transition-transform duration-300 ease-in-out transform group-hover:scale-105"
+                />
+              </div>
 
-          <!-- Facility Name -->
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">
-            {{ travel.facilityName }}
-          </h2>
+              <!-- Text Section -->
+              <div class="space-y-4">
+                <h2 class="text-3xl font-extrabold text-gray-900">
+                  {{ travel.facilityName }}
+                </h2>
 
-          <!-- Road Address -->
-          <p class="text-lg text-gray-700 mb-2">
-            <span class="font-medium text-gray-800">도로명 주소:</span>
-            {{ travel.roadAddress }}
-          </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p class="text-base text-gray-700">
+                      <span class="font-semibold text-gray-900"
+                        >도로명 주소:</span
+                      >
+                      {{ travel.roadAddress }}
+                    </p>
+                    <p class="text-base text-gray-700">
+                      <span class="font-semibold text-gray-900"
+                        >지번 주소:</span
+                      >
+                      {{ travel.streetNumberAddress }}
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-base text-gray-700">
+                      <span class="font-semibold text-gray-900"
+                        >여행지 소개:</span
+                      >
+                      {{ travel.facilityIntroduction }}
+                    </p>
+                    <p class="text-base text-gray-700">
+                      <span class="font-semibold text-gray-900">전화번호:</span>
+                      {{ travel.phoneNumber }}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-          <!-- Street_number Address -->
-          <p class="text-lg text-gray-700 mb-2">
-            <span class="font-medium text-gray-800">지번 주소:</span>
-            {{ travel.streetNumberAddress }}
-          </p>
+              <!-- Map Section -->
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  여행지 위치
+                </h3>
+                <div class="w-full h-96 rounded-lg overflow-hidden shadow-sm">
+                  <KakaoMapView
+                    :latitude="travel.latitude"
+                    :longitude="travel.longitude"
+                    :facilityName="travel.facilityName"
+                    :roadAddress="travel.roadAddress"
+                    :phoneNumber="travel.phoneNumber"
+                  />
+                </div>
+              </div>
 
-          <!-- Location -->
-          <p class="text-lg text-gray-700 mb-2">
-            <span class="font-medium text-gray-800">여행지 소개:</span>
-            {{ travel.facilityIntroduction }}
-          </p>
+              <!-- Diary Navigation Section -->
+              <DiaryListNavBar :tripId="tripId" class="mt-6" />
+            </div>
 
-          <!-- Phone Number -->
-          <p class="text-lg text-gray-700 mb-6">
-            <span class="font-medium text-gray-800">전화번호:</span>
-            {{ travel.phoneNumber }}
-          </p>
-
-          <!-- Map -->
-          <h3 class="text-xl font-semibold text-gray-800 mb-4">여행지 위치</h3>
-          <div class="w-full h-full rounded-lg overflow-hidden shadow-sm">
-            <KakaoMapView
-              :latitude="travel.latitude"
-              :longitude="travel.longitude"
-              :facilityName="travel.facilityName"
-              :roadAddress="travel.roadAddress"
-              :phoneNumber="travel.phoneNumber"
-            />
-          </div>
-
-          <DiaryListNavBar :tripId="tripId" />
+            <!-- Loading -->
+            <div v-else class="text-center py-12">
+              <p class="text-lg text-gray-500">로딩 중...</p>
+            </div>
+          </main>
         </div>
-
-        <!-- Loading -->
-        <div v-else class="text-center py-12">
-          <p class="text-lg text-gray-500">로딩 중...</p>
-        </div>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
 <script setup>
 import KakaoMapView from "@/components/KakaoMapView.vue";
+import Header from "@/components/Header.vue";
+import Navbar from "@/components/Navbar.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
@@ -117,31 +125,10 @@ onMounted(() => {
       console.error("데이터를 가져오는 데 실패했습니다.", error);
     });
 });
-
-// Sidebar menu items
-const menuItems = ref([
-  { name: "Home", href: "#", icon: "icon-home" },
-  { name: "Popular", href: "#", icon: "icon-star" },
-  { name: "Canned Goods", href: "#", icon: "icon-archive" },
-  { name: "Fresh Produce", href: "#", icon: "icon-leaf" },
-  { name: "Checkout", href: "#", icon: "icon-cart" },
-]);
 </script>
 
 <style scoped>
-.icon-home::before {
-  content: "🏠";
-}
-.icon-star::before {
-  content: "⭐";
-}
-.icon-archive::before {
-  content: "📦";
-}
-.icon-leaf::before {
-  content: "🍃";
-}
-.icon-cart::before {
-  content: "🛒";
+main {
+  transition: none;
 }
 </style>

@@ -67,7 +67,12 @@ const onClickKakaoMapMarker = () => {
 </script>
 
 <template>
-  <KakaoMap :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true">
+  <KakaoMap
+    :lat="coordinate.lat"
+    :lng="coordinate.lng"
+    :draggable="true"
+    style="width: 100%; height: 600px"
+  >
     <KakaoMapMarker
       :lat="coordinate.lat"
       :lng="coordinate.lng"
