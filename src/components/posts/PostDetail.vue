@@ -160,6 +160,7 @@ const isCommentWriteOpen = ref(false);
 const newComment = ref("");
 
 const closeModal = () => {
+  window.location.reload();
   emit("close");
 };
 
