@@ -88,13 +88,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import Header from "@/components/Header.vue";
 import Navbar from "@/components/Navbar.vue";
 import { jwtDecode } from "jwt-decode"; // JWT 디코딩
 
+// 로그인 상태 확인
+import { useRouter } from "vue-router";
+const router = useRouter();
+const accessToken = ref(localStorage.getItem("accessToken"));
+const isLoggedIn = computed(() => {
+  return !!accessToken.value;
+});
+
 const token = localStorage.getItem("accessToken");
-const payload = jwtDecode(token);
+
 
 // 현재 활성화된 탭을 관리하는 상태
 const activeTab = ref("faq");
@@ -106,6 +114,7 @@ const tossPayments = TossPayments(clientKey);
 
 const tosspayment = (amount) => {
 
+  const payload = jwtDecode(token);
   tossPayments.requestPayment("카드",{
           amount: amount,
           orderId: generateRandomOrderId(),
@@ -130,6 +139,12 @@ const generateRandomOrderId = () => {
 const setTab = (tabName) => {
   activeTab.value = tabName;
 };
+
+onMounted(() => {
+  if (!accessToken.value) {
+    router.push("/login");
+  }
+});
 </script>
 
 <style scoped>

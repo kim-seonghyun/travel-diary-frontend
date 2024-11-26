@@ -118,16 +118,14 @@ const goDetail = (id) => {
   router.push({ name: "travelDetail", params: { id } });
 };
 
-// 메뉴 항목들
-const menuItems = ref([
-  { name: "Home", href: "#", icon: "icon-home" },
-  { name: "Popular", href: "#", icon: "icon-star" },
-  { name: "Canned Goods", href: "#", icon: "icon-archive" },
-  { name: "Fresh Produce", href: "#", icon: "icon-leaf" },
-  { name: "Checkout", href: "#", icon: "icon-cart" },
-]);
+// 로그인 상태 확인
+const accessToken = ref(localStorage.getItem("accessToken"));
+const isLoggedIn = computed(() => {
+  return !!accessToken.value;
+});
 
-// 검색 및 필터 관련 데이터
+// 로그인 여부에 따른 라우팅 처리
+
 const locationNumber = ref("0");
 const totalPages = ref();
 const currentPage = ref(1);
@@ -257,6 +255,9 @@ watch(locationNumber, () => {
 
 // 컴포넌트가 마운트될 때 여행지 데이터를 가져옵니다.
 onMounted(() => {
+  if (!accessToken.value) {
+    router.push("/login");
+  }
   fetchDestinations();
   fetchTotalCount();
 });
