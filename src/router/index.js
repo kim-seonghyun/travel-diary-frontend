@@ -27,6 +27,10 @@ const router = createRouter({
       component: Main,
       children: [
         {
+          path: "/",
+          component: Content
+        },
+        {
           path: '/travel-diary/detail/:id',
           component: TravelDiaryDetail,
           name: 'TravelDiaryDetail'
