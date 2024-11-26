@@ -94,7 +94,6 @@ const openModal = async (id) => {
   selectedPostId.value = id;
   isModalOpen.value = true;
   await incrementViewCount(id);
-
 };
 const incrementViewCount = async (id) => {
   try {
@@ -107,6 +106,7 @@ const incrementViewCount = async (id) => {
 const incrementLikesCount = async (id) => {
   try {
     await axios.get(`http://localhost:8080/api/post/${id}/increment-likes`);
+    window.location.reload();
   } catch (error) {
     console.error("좋아요 수 증가 중 오류가 발생했습니다:", error);
   }
