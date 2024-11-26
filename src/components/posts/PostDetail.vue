@@ -61,12 +61,14 @@
           </div>
 
           <!-- 게시물 내용 -->
-          <div class="mb-6">
+          <div class="mb-6">  <p class="text-xs text-gray-500">좋아요 : {{ postLikes }}</p>
+            <p class="text-xs text-gray-500">조회수 : {{ viewsCount }}</p>
             <p class="text-gray-800 leading-relaxed whitespace-pre-line">{{ content }}</p>
           </div>
 
           <!-- 게시 시간 및 액션 버튼 -->
           <div>
+
             <p class="text-sm text-gray-400 mb-4">게시 시간: {{ timeAgo }}</p>
             <div class="flex space-x-4">
               <button

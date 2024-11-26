@@ -118,7 +118,7 @@ defineProps({
   facilityName: String,
   postImage : String,
   content: String,
-  timeAgo: Date,
+  timeAgo: String,
   createdAt: Date,
   viewsCount: Number,
   postLikes: Number,

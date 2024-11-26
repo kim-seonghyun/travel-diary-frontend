@@ -16,6 +16,7 @@ import CreatePost from "@/components/posts/CreatePost.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import Content from "@/components/Content.vue";
 import TravelDiaryForm from "@/components/travel-diary/TravelDiaryForm.vue";
+import TravelDiaryDetail from "@/components/travel-diary/TravelDiaryDetail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,11 @@ const router = createRouter({
       name: "Main",
       component: Main,
       children: [
+        {
+          path: '/travel-diary/detail/:id',
+          component: TravelDiaryDetail,
+          name: 'TravelDiaryDetail'
+        },
         {
           path: "/travel-diary/create",
           component: TravelDiaryForm
