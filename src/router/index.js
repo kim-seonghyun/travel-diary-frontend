@@ -15,6 +15,9 @@ import PostList from "@/components/posts/PostList.vue";
 import CreatePost from "@/components/posts/CreatePost.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import Content from "@/components/Content.vue";
+
+import PostListByTrip from "@/components/posts/PostListByTrip.vue";
+import PostListOrderLike from "@/components/posts/PostListOrderLike.vue";
 import TravelDiaryForm from "@/components/travel-diary/TravelDiaryForm.vue";
 import TravelDiaryDetail from "@/components/travel-diary/TravelDiaryDetail.vue";
 
@@ -48,6 +51,14 @@ const router = createRouter({
           component: PostList,
         },
         {
+          path: "/post-list/trip",
+          component: PostListByTrip,
+        },
+        {
+          path: "/post-list/trip/like",
+          component: PostListOrderLike,
+        },
+        {
           path: "question-list",
           component: QuestionList,
         },
@@ -61,8 +72,8 @@ const router = createRouter({
         },
         {
           path: "/post/create",
-          component: CreatePost
-        }
+          component: CreatePost,
+        },
       ],
     },
     {
