@@ -36,6 +36,12 @@ watch(selectedValue, (newValue) => {
         class="mt-2 bg-white rounded-lg shadow-lg max-h-60 overflow-y-auto border border-gray-200"
       >
         <SelectItem
+          value="0"
+          class="px-6 py-2 hover:bg-primary hover:text-white cursor-pointer transition-colors duration-200 rounded-lg"
+          >전체</SelectItem
+        >
+
+        <SelectItem
           value="1"
           class="px-6 py-2 hover:bg-primary hover:text-white cursor-pointer transition-colors duration-200 rounded-lg"
           >서울특별시</SelectItem
